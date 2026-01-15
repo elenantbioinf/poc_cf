@@ -1,0 +1,30 @@
+
+#############################################################
+# Samples
+samples_table: "config/samples.tsv"
+
+
+#############################################################
+# Reference genome
+reference:
+  #local path where the reference genome in fasta will be stored
+  fasta: "data/reference/hg38.fa"
+  #url to download the reference genome if don't use local
+  url:
+
+
+##############################################################
+# Raw sequencing reads
+reads:
+  #local path where the FASTQ files will be stored
+  raw_reads: "data/raw"
+  #sequencing type
+  paired_end: true
+
+
+##############################################################
+# Trimming by lenght
+
+trimming: 
+  min_length: 30
+
