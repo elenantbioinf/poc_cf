@@ -1,15 +1,16 @@
 #Ignore the data
-data/
-results/
+data/*
+results/*
 
 #But keep the structure
-!data/
-!results/
 !data/raw/.gitkeep
 !data/clean/.gitkeep
 !data/reference/.gitkeep
 !data/database_cftr/.gitkeep
 !results/.gitkeep
+
+#ignore snakemake cache
+.snakemake
 
 # History files
 .Rhistory
