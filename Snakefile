@@ -9,7 +9,8 @@ include: "rules/quality_control.smk"
 
 rule targets:
     input:
-        expand("results/quality_control/{id}_R1_fastqc.html", id = SAMPLES),
-        expand("results/quality_control/{id}_R2_fastqc.html", id = SAMPLES),
-        expand("results/quality_control/{id}_R1_fastqc.zip", id = SAMPLES),
-        expand("results/quality_control/{id}_R2_fastqc.zip", id = SAMPLES)
+        expand("results/quality_control/fastqc/{id}_R1_fastqc.html", id = SAMPLES),
+        expand("results/quality_control/fastqc/{id}_R2_fastqc.html", id = SAMPLES),
+        expand("results/quality_control/fastqc/{id}_R1_fastqc.zip", id = SAMPLES),
+        expand("results/quality_control/fastqc/{id}_R2_fastqc.zip", id = SAMPLES),
+        "results/quality_control/multiqc/multiqc_report.html"
