@@ -1,5 +1,5 @@
 
-#############################################################
+#################This is the config.yml############################################
 # Samples
 samples_table: "config/samples.tsv"
 
@@ -14,17 +14,18 @@ reference:
 
 
 ##############################################################
-# Raw sequencing reads
-reads:
-  #local path where the FASTQ files will be stored
+paths:
+  #local path for the raw data
   raw_reads: "data/raw"
   #sequencing type
   paired_end: true
-
+  #local path for the clean data (after trimming)
+  clean_reads: "data/clean"
+  #path for the trimming results
+  preprocessing_results: "results/preprocessing"
 
 ##############################################################
-# Trimming by lenght
-
+# Trimming params
 trimming: 
+  #trim by lenght
   min_length: 30
-

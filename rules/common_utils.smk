@@ -5,11 +5,9 @@
 
 
 #Read samples table
+#samples.tsv has the following columns: sample_id, fastq_1, #fastq_2
 
 import pandas as pd 
-
-    #samples.tsv has the following columns: sample_id, fastq_1,
-    #fastq_2
 
 sample_table = pd.read_table(
     config["samples_table"],
@@ -26,3 +24,9 @@ def get_read1(wildcards):
 
 def get_read2(wildcards):
     return sample_table.loc[wildcards.id, "fastq_2"]
+
+
+#Function to know the lenght of trimming
+
+def get_minlen(wildcards):
+    return config["trimming"]["min_length"]
