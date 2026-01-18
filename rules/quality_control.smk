@@ -5,8 +5,8 @@
 
 rule raw_fastqc:
     input:
-        r1 = "data/raw/{id}_R1.fastq.gz",
-        r2 = "data/raw/{id}_R2.fastq.gz",
+        r1 = get_read1,
+        r2 = get_read2,
         script = "scripts/run_fastqc.sh"
     output:
         "results/quality_control/{id}_R1_fastqc.html",

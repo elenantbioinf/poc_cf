@@ -19,5 +19,10 @@ sample_table = pd.read_table(
 SAMPLES = sample_table.index.unique().tolist()
 
 
-#Note for me: the function to read fastq will be done in
-#future
+#Function to read fastq files, to get the name
+
+def get_read1(wildcards):
+    return sample_table.loc[wildcards.id, "fastq_1"]
+
+def get_read2(wildcards):
+    return sample_table.loc[wildcards.id, "fastq_2"]
