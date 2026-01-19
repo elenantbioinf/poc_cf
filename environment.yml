@@ -7,3 +7,4 @@ dependencies:
   - python=3.11
   - snakemake
   - pandas
+  - graphviz=14.1.1
