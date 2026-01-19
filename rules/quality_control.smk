@@ -9,21 +9,19 @@ rule raw_fastqc:
         r2 = get_read2,
         script = "scripts/run_fastqc.sh"
     output:
-        "results/quality_control/fastqc/{id}_R1_fastqc.html",
-        "results/quality_control/fastqc/{id}_R2_fastqc.html",
-        "results/quality_control/fastqc/{id}_R1_fastqc.zip",
-        "results/quality_control/fastqc/{id}_R2_fastqc.zip"
+        done = "results/quality_control/fastqc/.done/{id}.fastqc.done"
     conda:
         "../envs/quality_control.yml"
     shell:
         """
+        mkdir -p results/quality_control/fastqc/.done
         {input.script} {input.r1} {input.r2} results/quality_control/fastqc
+        touch {output.done}
         """
 
 rule raw_multiqc:
-    input:
-        expand("results/quality_control/fastqc/{id}_R1_fastqc.zip", id=SAMPLES),
-        expand("results/quality_control/fastqc/{id}_R2_fastqc.zip", id=SAMPLES),
+    input:  #Depend on ALL FastQC zip files
+        done = expand("results/quality_control/fastqc/.done/{id}.fastqc.done", id=SAMPLES),
         script = "scripts/multiqc.sh"
     output:
         "results/quality_control/multiqc/multiqc_report.html"

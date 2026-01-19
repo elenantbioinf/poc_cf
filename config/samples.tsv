@@ -1,2 +1,2 @@
 sample_id	fastq_1	fastq_2
-NA12878rep1-4_S1_L001_001	data/raw/NA12878rep1-4_S1_L001_001_R1.fastq.gz	data/raw/NA12878rep1-4_S1_L001_001_R2.fastq.gz
+NA12878rep1-4	data/raw/NA12878rep1-4_S1_L001_001_R1.fastq.gz	data/raw/NA12878rep1-4_S1_L001_001_R2.fastq.gz
