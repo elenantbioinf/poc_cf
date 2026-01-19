@@ -15,10 +15,11 @@ include: "rules/preprocessing.smk"
 rule all:
     input:
         #Quality_control
-        "results/quality_control/multiqc/multiqc_report.html",
+        "results/quality_control/raw_multiqc/multiqc_report.html",
         #Preprocessing: trimming_fastp
         expand("data/clean/{id}_R1.trimmed.fastq.gz", id = SAMPLES),
         expand("data/clean/{id}_R2.trimmed.fastq.gz", id = SAMPLES),
         expand("results/preprocessing/{id}.fastp.html", id = SAMPLES),
-        expand("results/preprocessing/{id}.fastp.json", id = SAMPLES)
+        expand("results/preprocessing/{id}.fastp.json", id = SAMPLES),
+        "results/quality_control/clean_multiqc/multiqc_report.html",
         
