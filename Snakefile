@@ -6,20 +6,31 @@ configfile: "config/config.yml"
 
 #Rules
 
-include: "rules/common_utils.smk"
-include: "rules/quality_control.smk"
-include: "rules/preprocessing.smk"
+include: "rules/00_common_utils.smk"
+include: "rules/01_quality_control.smk"
+include: "rules/02_preprocessing.smk"
+include: "rules/03_get_reference.smk"
 
 #Goal rule with the final files
 
 rule all:
     input:
-        #Quality_control
+        #Quality_control in raw reads
         "results/quality_control/raw_multiqc/multiqc_report.html",
         #Preprocessing: trimming_fastp
         expand("data/clean/{id}_R1.trimmed.fastq.gz", id = SAMPLES),
         expand("data/clean/{id}_R2.trimmed.fastq.gz", id = SAMPLES),
+        #Preprocessing: fastp reports
         expand("results/preprocessing/{id}.fastp.html", id = SAMPLES),
         expand("results/preprocessing/{id}.fastp.json", id = SAMPLES),
+        #Preprocessing: Quality control after trimming
         "results/quality_control/clean_multiqc/multiqc_report.html",
+        #Reference genome
+        config["reference"]["fasta"],
+        config["reference"]["fasta"] + ".fai",
+        expand(
+            config["reference"]["fasta"] + ".{ext}",
+            ext = ["amb", "ann", "bwt", "pac", "sa"]
+        )
+
         

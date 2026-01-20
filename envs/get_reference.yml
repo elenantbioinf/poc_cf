@@ -1,0 +1,9 @@
+name: get_reference
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - wget
+  - bwa=0.7.19
+  - samtools=1.23
