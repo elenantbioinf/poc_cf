@@ -15,10 +15,18 @@ mkdir -p data/clean
 mkdir -p results/preprocessing
 
 fastp \
-    -i "$R1" -I "$R2" -o "$OUT1" -O "$OUT2" \
-    --detect_adapter_for_pe --trim_poly_g --trim_poly_x \
-    --cut_tail --cut_window_size 4 --cut_mean_quality 20 \
-    --qualified_quality_phred 20 --unqualified_percent_limit 40 \
+    -i "$R1" \
+    -I "$R2" \
+    -o "$OUT1" \
+    -O "$OUT2" \
+    --detect_adapter_for_pe \
+    --trim_poly_g \
+    --trim_poly_x \
+    --cut_tail \
+    --cut_window_size 4 \
+    --cut_mean_quality 20 \
+    --qualified_quality_phred 20 \
+    --unqualified_percent_limit 40 \
     --n_base_limit 5 \
     --length_required "$MINLEN" \
     --html "$HTML" \
