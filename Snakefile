@@ -10,6 +10,7 @@ include: "rules/00_common_utils.smk"
 include: "rules/01_quality_control.smk"
 include: "rules/02_preprocessing.smk"
 include: "rules/03_get_reference.smk"
+include: "rules/04_mapping.smk"
 
 #Goal rule with the final files
 
@@ -31,6 +32,9 @@ rule all:
         expand(
             config["reference"]["fasta"] + ".{ext}",
             ext = ["amb", "ann", "bwt", "pac", "sa"]
-        )
+        ),
+        #Mapping
+        expand("results/mapping/{id}.sam", id = SAMPLES),
+        expand("results/mapping/stderr/{id}.error", id=SAMPLES),
 
         
