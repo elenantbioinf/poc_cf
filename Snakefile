@@ -36,5 +36,7 @@ rule all:
         #Mapping
         expand("results/mapping/{id}.sam", id = SAMPLES),
         expand("results/mapping/stderr/{id}.error", id=SAMPLES),
+        #SAM_to_BAM
+        expand("results/mapping/{id}.bam", id=SAMPLES)
 
         

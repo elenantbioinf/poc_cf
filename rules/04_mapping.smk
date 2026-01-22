@@ -2,11 +2,14 @@
 #This rule is to mapping
 ###################################
 
+
+#Rule to do the mapping
+
 rule bwa_mapping:
     input:
         script = "scripts/run_mapping.sh",
-        r1 = expand("data/clean/{id}_R1.trimmed.fastq.gz", id = SAMPLES),
-        r2 = expand("data/clean/{id}_R2.trimmed.fastq.gz", id = SAMPLES),
+        r1 = "data/clean/{id}_R1.trimmed.fastq.gz",
+        r2 = "data/clean/{id}_R2.trimmed.fastq.gz",
         reference = config["reference"]["fasta"],
         bwa_index = expand(
             config["reference"]["fasta"] + ".{ext}",
@@ -21,4 +24,20 @@ rule bwa_mapping:
     shell:
         """
         {input.script} {input.reference} {input.r1} {input.r2} {output.sam} {output.error} {threads}
+        """
+
+#Rule to transform the sam file into bam fle
+
+rule sam_to_bam:
+    input:
+        sam = "results/mapping/{id}.sam",
+        script = "scripts/sam_to_bam.sh"
+    output:
+        bam = "results/mapping/{id}.bam"
+    conda:
+        "../envs/mapping.yml"
+    threads: 10
+    shell:
+        """
+        {input.script} {input.sam} {output.bam} {threads}
         """
