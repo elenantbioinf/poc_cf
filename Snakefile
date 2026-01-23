@@ -37,6 +37,10 @@ rule all:
         expand("results/mapping/{id}.sam", id = SAMPLES),
         expand("results/mapping/stderr/{id}.error", id=SAMPLES),
         #SAM_to_BAM
-        expand("results/mapping/{id}.bam", id=SAMPLES)
+        expand("results/mapping/{id}.unsorted.bam", id=SAMPLES),
+        #BAM_sorted:
+        expand("results/mapping/{id}.sorted.bam", id=SAMPLES),
+        #BAM_index:
+        expand("results/mapping/{id}.sorted.bam.bai", id=SAMPLES)
 
         

@@ -33,11 +33,42 @@ rule sam_to_bam:
         sam = "results/mapping/{id}.sam",
         script = "scripts/sam_to_bam.sh"
     output:
-        bam = "results/mapping/{id}.bam"
+        bam_unsorted = "results/mapping/{id}.unsorted.bam"
     conda:
         "../envs/mapping.yml"
     threads: 10
     shell:
         """
-        {input.script} {input.sam} {output.bam} {threads}
+        {input.script} {input.sam} {output.bam_unsorted} {threads}
+        """
+
+#Rule to sort the bam file
+
+rule bam_sort:
+    input:
+        bam_unsorted = "results/mapping/{id}.unsorted.bam",
+        script = "scripts/bam_sort.sh"
+    output:
+        bam_sorted = "results/mapping/{id}.sorted.bam"
+    conda: 
+        "../envs/mapping.yml"
+    threads: 10
+    shell:
+        """
+        {input.script} {input.bam_unsorted} {output.bam_sorted} {threads}
+        """
+
+#Rule to index the bam_sorted file
+
+rule bam_index:
+    input:
+        bam_sorted = "results/mapping/{id}.sorted.bam",
+        script = "scripts/bam_index.sh"
+    output:
+        bam_index = "results/mapping/{id}.sorted.bam.bai"
+    conda: 
+        "../envs/mapping.yml"
+    shell:
+        """
+        {input.script} {input.bam_sorted}
         """

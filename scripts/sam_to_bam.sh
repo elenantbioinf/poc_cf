@@ -9,6 +9,6 @@ SAM="$1"
 BAM="$2"
 THREADS="$3"
 
-mkdir -p "(dirname "$BAM")"
+mkdir -p "$(dirname "$BAM")"
 
 samtools view -@ "$THREADS" -bSh "$SAM" > "$BAM"
