@@ -11,6 +11,7 @@ include: "rules/01_quality_control.smk"
 include: "rules/02_preprocessing.smk"
 include: "rules/03_get_reference.smk"
 include: "rules/04_mapping.smk"
+include: "rules/05_quality_alignment.smk"
 
 #Goal rule with the final files
 
@@ -41,6 +42,8 @@ rule all:
         #BAM_sorted:
         expand("results/mapping/{id}.sorted.bam", id=SAMPLES),
         #BAM_index:
-        expand("results/mapping/{id}.sorted.bam.bai", id=SAMPLES)
+        expand("results/mapping/{id}.sorted.bam.bai", id=SAMPLES),
+        #Quality control in alignment:
+        expand("results/quality_alignment/{id}.flagstat.txt", id=SAMPLES)
 
         

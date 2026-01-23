@@ -1,0 +1,8 @@
+name: quality_alignment
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - samtools=1.23
+  - qualimap=2.3
