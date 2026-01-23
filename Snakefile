@@ -44,6 +44,7 @@ rule all:
         #BAM_index:
         expand("results/mapping/{id}.sorted.bam.bai", id=SAMPLES),
         #Quality control in alignment:
-        expand("results/quality_alignment/{id}.flagstat.txt", id=SAMPLES)
+        expand("results/quality_alignment/{id}.flagstat.txt", id=SAMPLES),
+        expand("results/quality_alignment/qualimap/{id}", id=SAMPLES)
 
         
