@@ -12,6 +12,7 @@ include: "rules/02_preprocessing.smk"
 include: "rules/03_get_reference.smk"
 include: "rules/04_mapping.smk"
 include: "rules/05_quality_alignment.smk"
+include: "rules/06_mark_duplicates.smk"
 
 #Goal rule with the final files
 
@@ -45,6 +46,13 @@ rule all:
         expand("results/mapping/{id}.sorted.bam.bai", id=SAMPLES),
         #Quality control in alignment:
         expand("results/quality_alignment/{id}.flagstat.txt", id=SAMPLES),
-        expand("results/quality_alignment/qualimap/{id}", id=SAMPLES)
+        expand("results/quality_alignment/qualimap/{id}", id=SAMPLES),
+        ## Add read groups
+        expand("results/mark_duplicates/{id}.sorted.rg.bam", id=SAMPLES),
+        expand("results/mark_duplicates/{id}.sorted.rg.bam.bai", id=SAMPLES),
+        #Mark duplicates
+        expand("results/mark_duplicates/{id}.dedup.bam", id=SAMPLES),
+        expand("results/mark_duplicates/{id}.dedup.bam.bai", id=SAMPLES),
+        expand("results/mark_duplicates/{id}_mark_duplicates_metrics.txt", id=SAMPLES)
 
         
