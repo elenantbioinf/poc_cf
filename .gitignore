@@ -9,6 +9,10 @@ results/*
 !data/database_cftr/.gitkeep
 !results/.gitkeep
 
+# Allow CFTR annotation files
+!data/database_cftr/
+!data/database_cftr/*
+
 #ignore snakemake cache
 .snakemake
 
