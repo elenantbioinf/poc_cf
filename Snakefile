@@ -13,6 +13,7 @@ include: "rules/03_get_reference.smk"
 include: "rules/04_mapping.smk"
 include: "rules/05_quality_alignment.smk"
 include: "rules/06_mark_duplicates.smk"
+include: "rules/07_coverage.smk"
 
 #Goal rule with the final files
 
@@ -53,6 +54,6 @@ rule all:
         #Mark duplicates
         expand("results/mark_duplicates/{id}.dedup.bam", id=SAMPLES),
         expand("results/mark_duplicates/{id}.dedup.bam.bai", id=SAMPLES),
-        expand("results/mark_duplicates/{id}_mark_duplicates_metrics.txt", id=SAMPLES)
-
-        
+        expand("results/mark_duplicates/{id}_mark_duplicates_metrics.txt", id=SAMPLES),
+        #Coverage_CFTR:
+        expand("results/coverage/{id}.regions.bed.gz", id=SAMPLES)       
