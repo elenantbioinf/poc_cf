@@ -4,8 +4,8 @@
 # This is the script to index the vcf file with tabix
 ######################################
 
-TBI="$1"
+VCF_GZ="$1"
 
-mkdir -p "$(dirname "$TBI")"
+mkdir -p "$(dirname "$VCF_GZ")"
 
-tabix -f -p vcf "$TBI"
+tabix -p vcf "$VCF_GZ"

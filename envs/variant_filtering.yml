@@ -1,0 +1,8 @@
+name: variant_filtering
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bcftools=1.23
+  - htslib

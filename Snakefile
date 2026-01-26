@@ -15,6 +15,7 @@ include: "rules/05_quality_alignment.smk"
 include: "rules/06_mark_duplicates.smk"
 include: "rules/07_coverage.smk"
 include: "rules/08_variant_calling.smk"
+include: "rules/09_variant_filtering.smk"
 
 #Goal rule with the final files
 
@@ -60,4 +61,7 @@ rule all:
         expand("results/coverage/{id}.regions.bed.gz", id=SAMPLES),
         #Variant_calling and index:
         expand("results/variant_calling/{id}.vcf.gz", id=SAMPLES),
-        expand("results/variant_calling/{id}.vcf.gz.tbi", id=SAMPLES)
+        expand("results/variant_calling/{id}.vcf.gz.tbi", id=SAMPLES),
+        #Variant filtering and index:
+        expand("results/variant_filtering/{id}.filtered.vcf.gz", id=SAMPLES),
+        expand("results/variant_filtering/{id}.filtered.vcf.gz.tbi", id=SAMPLES)
