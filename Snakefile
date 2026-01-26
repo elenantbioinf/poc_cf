@@ -14,6 +14,7 @@ include: "rules/04_mapping.smk"
 include: "rules/05_quality_alignment.smk"
 include: "rules/06_mark_duplicates.smk"
 include: "rules/07_coverage.smk"
+include: "rules/08_variant_calling.smk"
 
 #Goal rule with the final files
 
@@ -56,4 +57,7 @@ rule all:
         expand("results/mark_duplicates/{id}.dedup.bam.bai", id=SAMPLES),
         expand("results/mark_duplicates/{id}_mark_duplicates_metrics.txt", id=SAMPLES),
         #Coverage_CFTR:
-        expand("results/coverage/{id}.regions.bed.gz", id=SAMPLES)       
+        expand("results/coverage/{id}.regions.bed.gz", id=SAMPLES),
+        #Variant_calling and index:
+        expand("results/variant_calling/{id}.vcf.gz", id=SAMPLES),
+        expand("results/variant_calling/{id}.vcf.gz.tbi", id=SAMPLES)

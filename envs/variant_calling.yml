@@ -1,0 +1,8 @@
+name: variant_calling
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - freebayes=1.3.10
+  - htslib
