@@ -16,6 +16,7 @@ include: "rules/06_mark_duplicates.smk"
 include: "rules/07_coverage.smk"
 include: "rules/08_variant_calling.smk"
 include: "rules/09_variant_filtering.smk"
+include: "rules/10_annotation.smk"
 
 #Goal rule with the final files
 
@@ -64,4 +65,6 @@ rule all:
         expand("results/variant_calling/{id}.vcf.gz.tbi", id=SAMPLES),
         #Variant filtering and index:
         expand("results/variant_filtering/{id}.filtered.vcf.gz", id=SAMPLES),
-        expand("results/variant_filtering/{id}.filtered.vcf.gz.tbi", id=SAMPLES)
+        expand("results/variant_filtering/{id}.filtered.vcf.gz.tbi", id=SAMPLES),
+        #Extract the variants from filtered.vcf:
+        expand("results/annotation/{id}.variants.tsv", id=SAMPLES)

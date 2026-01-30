@@ -1,0 +1,10 @@
+name: annotation
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - pandas
+  - requests
+  - python=3.12
+  - bcftools=1.23
