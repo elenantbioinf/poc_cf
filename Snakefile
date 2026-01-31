@@ -68,4 +68,6 @@ rule all:
         expand("results/variant_filtering/{id}.filtered.vcf.gz.tbi", id=SAMPLES),
         #Extract the variants from filtered.vcf:
         expand("results/annotation/{id}.variants.tsv", id=SAMPLES),
-        expand("results/annotation/{id}.variants_check.txt", id=SAMPLES)
+        expand("results/annotation/{id}.variants_check.txt", id=SAMPLES),
+        #Annotation with vep rest
+        expand("results/annotation/{id}.vep.tsv", id=SAMPLES)

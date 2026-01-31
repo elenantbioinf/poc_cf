@@ -18,3 +18,19 @@ rule extract_variants:
         """
         {input.script} {input.vcf_filtered} {output.tsv} {output.check}
         """
+
+# Annotation with rest api vep
+
+rule rest_vep_annotation:
+    input:
+        tsv = "results/annotation/{id}.variants.tsv",
+        check = "results/annotation/{id}.variants_check.txt",
+        script = "scripts/vep_rest_annotation.py"
+    output:
+        annotation = "results/annotation/{id}.vep.tsv"
+    conda:
+        "../envs/annotation.yml"
+    shell:
+        """
+        python {input.script} {input.tsv} {input.check} {output.annotation} {wildcards.id}
+        """
