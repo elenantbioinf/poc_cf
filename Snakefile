@@ -17,6 +17,7 @@ include: "rules/07_coverage.smk"
 include: "rules/08_variant_calling.smk"
 include: "rules/09_variant_filtering.smk"
 include: "rules/10_annotation.smk"
+include: "rules/11_final_report.smk"
 
 #Goal rule with the final files
 
@@ -69,5 +70,7 @@ rule all:
         #Extract the variants from filtered.vcf:
         expand("results/annotation/{id}.variants.tsv", id=SAMPLES),
         expand("results/annotation/{id}.variants_check.txt", id=SAMPLES),
-        #Annotation with vep rest
-        expand("results/annotation/{id}.vep.tsv", id=SAMPLES)
+        #Annotation with vep rest:
+        expand("results/annotation/{id}.vep.tsv", id=SAMPLES),
+        #Generate the final report:
+        expand("final_report/{id}.final_report.txt", id=SAMPLES)
