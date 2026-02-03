@@ -1,6 +1,7 @@
 #Ignore the data
 data/*
 results/*
+final_report/*
 
 #But keep the structure
 !data/raw/.gitkeep
@@ -8,6 +9,7 @@ results/*
 !data/reference/.gitkeep
 !data/database_cftr/.gitkeep
 !results/.gitkeep
+!final_report/.gitkeep
 
 # Allow CFTR annotation files
 !data/database_cftr/
