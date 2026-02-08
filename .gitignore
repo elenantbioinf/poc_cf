@@ -1,19 +1,26 @@
-#Ignore the data
+# Ignore the data and results directories
 data/*
 results/*
 final_report/*
 
-#But keep the structure
-!data/raw/.gitkeep
-!data/clean/.gitkeep
-!data/reference/.gitkeep
-!data/database_cftr/.gitkeep
-!results/.gitkeep
-!final_report/.gitkeep
+# Keep the directory structure via README files
+!data/raw/
+data/raw/*
+!data/raw/README.md
 
-# Allow CFTR annotation files
+!data/clean/
+data/clean/*
+!data/clean/README.md
+
+!data/reference/
+data/reference/*
+!data/reference/README.md
+
 !data/database_cftr/
-!data/database_cftr/*
+
+!results/README.md
+
+!final_report/README.md
 
 #ignore snakemake cache
 .snakemake
