@@ -4,7 +4,7 @@
 
 # Rule for variant calling with FreeBayes
 
-rule variant_calling:
+rule r_08_01_variant_calling:
     input:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
@@ -24,7 +24,7 @@ rule variant_calling:
 
 # Rule for index the vcf file with tabix
 
-rule vcf_index:
+rule r_08_02_vcf_index:
     input:
         vcf = "results/variant_calling/{id}.vcf.gz",
         script = "scripts/vcf_index.sh"

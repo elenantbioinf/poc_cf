@@ -4,7 +4,7 @@
 
 #Flagstat analysis
 
-rule alignment_flagstat:
+rule r_05_01_alignment_flagstat:
     input:
         bam_sorted = "results/mapping/{id}.sorted.bam",
         bai = "results/mapping/{id}.sorted.bam.bai",
@@ -21,7 +21,7 @@ rule alignment_flagstat:
 
 #Qualimap analysis
 
-rule qualimap:
+rule r_05_02_qualimap:
     input:
         bam_sorted ="results/mapping/{id}.sorted.bam",
         bai = "results/mapping/{id}.sorted.bam.bai",

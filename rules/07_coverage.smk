@@ -5,7 +5,7 @@
 
 # Mosdepth rule
 
-rule coverage:
+rule r_07_01_coverage:
     input:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",

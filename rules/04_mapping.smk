@@ -5,7 +5,7 @@
 
 #Rule to do the mapping
 
-rule bwa_mapping:
+rule r_04_01_bwa_mapping:
     input:
         script = "scripts/run_mapping.sh",
         r1 = "data/clean/{id}_R1.trimmed.fastq.gz",
@@ -28,7 +28,7 @@ rule bwa_mapping:
 
 #Rule to transform the sam file into bam fle
 
-rule sam_to_bam:
+rule r_04_02_sam_to_bam:
     input:
         sam = "results/mapping/{id}.sam",
         script = "scripts/sam_to_bam.sh"
@@ -44,7 +44,7 @@ rule sam_to_bam:
 
 #Rule to sort the bam file
 
-rule bam_sort:
+rule r_04_03_bam_sort:
     input:
         bam_unsorted = "results/mapping/{id}.unsorted.bam",
         script = "scripts/bam_sort.sh"
@@ -60,7 +60,7 @@ rule bam_sort:
 
 #Rule to index the bam_sorted file
 
-rule bam_index:
+rule r_04_04_bam_index:
     input:
         bam_sorted = "results/mapping/{id}.sorted.bam",
         script = "scripts/bam_index.sh"

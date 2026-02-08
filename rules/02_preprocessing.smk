@@ -4,7 +4,7 @@
 
 
 #TRIMMING WITH FASTP
-rule trimming_fastp:
+rule r_02_01_trimming_fastp:
     input:
         r1 = get_read1,
         r2 = get_read2,
@@ -25,7 +25,7 @@ rule trimming_fastp:
 
 #QUALITY_CONTROL POST-TRIMMING WITH FASTQC AND MULTIQC
 
-rule clean_fastqc:
+rule r_02_02_clean_fastqc:
     input:
         r1 = "data/clean/{id}_R1.trimmed.fastq.gz",
         r2 = "data/clean/{id}_R2.trimmed.fastq.gz",
@@ -41,7 +41,7 @@ rule clean_fastqc:
         touch {output.done}
         """
 
-rule clean_multiqc:
+rule r_02_03_clean_multiqc:
     input:  #Depend on .done directory
         done = expand("results/quality_control/clean_fastqc/.done/{id}.fastqc.done", id=SAMPLES),
         script = "scripts/multiqc.sh"

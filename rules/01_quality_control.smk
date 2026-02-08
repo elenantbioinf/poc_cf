@@ -3,7 +3,7 @@
 #for the raw data
 ############################################
 
-rule raw_fastqc:
+rule r_01_01_raw_fastqc:
     input:
         r1 = get_read1,
         r2 = get_read2,
@@ -19,7 +19,7 @@ rule raw_fastqc:
         touch {output.done}
         """
 
-rule raw_multiqc:
+rule r_01_02_raw_multiqc:
     input:  #Depend on .done directory
         done = expand("results/quality_control/raw_fastqc/.done/{id}.fastqc.done", id=SAMPLES),
         script = "scripts/multiqc.sh"
