@@ -11,7 +11,7 @@ import pandas as pd
 #you need to change for your own raw data
 
 sample_table = pd.read_table(
-    config["samples_table"],
+    config["samples_table_path"],
     dtype=str
 ).set_index("sample_id")
 

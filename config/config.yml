@@ -1,7 +1,7 @@
 
 #################This is the config.yml############################################
 # Samples
-samples_table: "config/samples.tsv"
+samples_table_path: "config/samples.tsv"
 
 
 #############################################################
