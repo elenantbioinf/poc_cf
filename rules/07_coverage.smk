@@ -13,9 +13,11 @@ rule r_07_01_coverage:
         script = "scripts/coverage_mosdepth.sh"
     output:
         regions = "results/coverage/{id}.regions.bed.gz"
+    log:
+        "logs/07_coverage/{id}.mosdepth.log"
     conda:
         "../envs/coverage.yml"
     shell:
         """
-        {input.script} {input.bam_dedup} {input.bed} results/coverage/{wildcards.id}
+        {input.script} {input.bam_dedup} {input.bed} results/coverage/{wildcards.id} > {log} 2>&1
         """

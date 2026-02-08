@@ -14,12 +14,14 @@ rule r_08_01_variant_calling:
         script = "scripts/run_freebayes.sh"
     output:
         vcf = "results/variant_calling/{id}.vcf.gz"
+    log:
+        "logs/08_variant_calling/{id}.freebayes.log"
     conda:
         "../envs/variant_calling.yml"
     threads: 5
     shell:
         """
-        {input.script} {input.bam_dedup} {input.ref} {input.bed} {output.vcf} {threads}
+        {input.script} {input.bam_dedup} {input.ref} {input.bed} {output.vcf} {threads} > {log} 2>&1
         """
 
 # Rule for index the vcf file with tabix
@@ -30,9 +32,11 @@ rule r_08_02_vcf_index:
         script = "scripts/vcf_index.sh"
     output:
         tbi = "results/variant_calling/{id}.vcf.gz.tbi"
+    log:
+        "logs/08_variant_calling/{id}.vcf_index.log"
     conda:
         "../envs/variant_calling.yml"
     shell:
         """
-        {input.script} {input.vcf}
+        {input.script} {input.vcf} > {log} 2>&1
         """

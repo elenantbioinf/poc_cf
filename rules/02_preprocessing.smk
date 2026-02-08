@@ -14,13 +14,15 @@ rule r_02_01_trimming_fastp:
         r2 = "data/clean/{id}_R2.trimmed.fastq.gz",
         html = "results/preprocessing/{id}.fastp.html",
         json = "results/preprocessing/{id}.fastp.json"
+    log:
+        "logs/02_preprocessing/{id}.fastp.log"
     conda:
         "../envs/preprocessing.yml"
     params:
         minlen = get_minlen
     shell:
         """
-        {input.script} {input.r1} {input.r2} {output.r1} {output.r2} {output.html} {output.json} {params.minlen}
+        {input.script} {input.r1} {input.r2} {output.r1} {output.r2} {output.html} {output.json} {params.minlen} > {log} 2>&1
         """
 
 #QUALITY_CONTROL POST-TRIMMING WITH FASTQC AND MULTIQC
@@ -32,12 +34,14 @@ rule r_02_02_clean_fastqc:
         script = "scripts/run_fastqc.sh"
     output:
         done = "results/quality_control/clean_fastqc/.done/{id}.fastqc.done"
+    log:
+        "logs/02_preprocessing/{id}.clean_fastqc.log"
     conda:
         "../envs/quality_control.yml"
     shell:
         """
         mkdir -p results/quality_control/clean_fastqc/.done
-        {input.script} {input.r1} {input.r2} results/quality_control/clean_fastqc
+        {input.script} {input.r1} {input.r2} results/quality_control/clean_fastqc > {log} 2>&1
         touch {output.done}
         """
 
@@ -47,9 +51,11 @@ rule r_02_03_clean_multiqc:
         script = "scripts/multiqc.sh"
     output:
         "results/quality_control/clean_multiqc/multiqc_report.html"
+    log:
+        "logs/02_preprocessing/clean_multiqc.log"
     conda:
         "../envs/quality_control.yml"
     shell:
         """
-         {input.script} results/quality_control/clean_fastqc results/quality_control/clean_multiqc
+         {input.script} results/quality_control/clean_fastqc results/quality_control/clean_multiqc > {log} 2>&1
         """

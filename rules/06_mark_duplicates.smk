@@ -11,12 +11,14 @@ rule r_06_01_add_read_groups:
     output:
         bam_rg = "results/mark_duplicates/{id}.sorted.rg.bam",
         bai_rg = "results/mark_duplicates/{id}.sorted.rg.bam.bai"
+    log:
+        "logs/06_mark_duplicates/{id}.add_read_groups.log"
     conda:
         "../envs/mark_duplicates.yml"
     threads: 4
     shell:
         """
-        {input.script} {input.bam_sorted} {output.bam_rg} {wildcards.id} {threads}
+        {input.script} {input.bam_sorted} {output.bam_rg} {wildcards.id} {threads} > {log} 2>&1
         """
 
 
@@ -30,11 +32,13 @@ rule r_06_02_mark_duplicates:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
         metrics = "results/mark_duplicates/{id}_mark_duplicates_metrics.txt"
+    log:
+        "logs/06_mark_duplicates/{id}.mark_duplicates.log"
     conda:
         "../envs/mark_duplicates.yml"
     threads: 4
     shell:
         """
-        {input.script} {input.bam_rg} {output.bam_dedup} {output.metrics} {threads}
+        {input.script} {input.bam_rg} {output.bam_dedup} {output.metrics} {threads} > {log} 2>&1
         """
 

@@ -14,11 +14,13 @@ rule r_03_01_get_reference:
             config["reference"]["fasta"] + ".{ext}",
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         )
+    log:
+        "logs/03_get_reference/get_reference.log"
     params: 
         url=config["reference"]["url"]
     conda:
         "../envs/get_reference.yml"
     shell: 
         """
-        {input.script} {params.url} {output.fasta}
+        {input.script} {params.url} {output.fasta} > {log} 2>&1
         """
