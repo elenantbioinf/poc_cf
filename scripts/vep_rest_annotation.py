@@ -95,6 +95,8 @@ for tab in table:
       "MANE": tab.get("mane_select"),
       "canonical": tab.get("canonical"),
       "exon": tab.get("exon"),
+      "biotype": tab.get("biotype"),
+      "variant_allele": tab.get("variant_allele"),
   })
 
 final_table = pd.DataFrame(rows)
