@@ -4,7 +4,7 @@
 
 # Rule for filter
 
-rule r_09_01_filter_bcftools:
+rule r09_01_filter_bcftools:
     input:
         vcf = "results/variant_calling/{id}.vcf.gz",
         tbi = "results/variant_calling/{id}.vcf.gz.tbi",
@@ -26,7 +26,7 @@ rule r_09_01_filter_bcftools:
 
 # Rule for index the filtered vcf file
 
-rule r_09_02_vcf_filtered_index:
+rule r09_02_vcf_filtered_index:
     input:
         vcf_filtered = "results/variant_filtering/{id}.filtered.vcf.gz",
         script = "scripts/vcf_index.sh"

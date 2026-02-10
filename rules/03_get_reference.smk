@@ -4,7 +4,7 @@
 ###################################
 
 
-rule r_03_01_get_reference:
+rule r03_01_get_reference:
     input:
         script = "scripts/get_reference.sh",
     output:

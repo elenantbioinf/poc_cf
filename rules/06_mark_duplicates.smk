@@ -4,7 +4,7 @@
 
 
 # Add Read Groups
-rule r_06_01_add_read_groups:
+rule r06_01_add_read_groups:
     input:
         bam_sorted = "results/mapping/{id}.sorted.bam",
         script = "scripts/add_read_groups.sh"
@@ -23,7 +23,7 @@ rule r_06_01_add_read_groups:
 
 
 # Mark duplicates using Picard
-rule r_06_02_mark_duplicates:
+rule r06_02_mark_duplicates:
     input:
         bam_rg = "results/mark_duplicates/{id}.sorted.rg.bam",
         bai_rg = "results/mark_duplicates/{id}.sorted.rg.bam.bai",

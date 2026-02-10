@@ -2,7 +2,7 @@
 # This module is for the generation of final report
 ###################################
 
-rule r_11_01_final_report:
+rule r11_01_final_report:
     input:
         script = "scripts/final_report.py",
         annotation = "results/annotation/{id}.vep.tsv",
