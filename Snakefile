@@ -62,8 +62,11 @@ rule all:
         #Coverage_CFTR:
         expand("results/coverage/{id}.regions.bed.gz", id=SAMPLES),
         #Variant_calling and index:
-        expand("results/variant_calling/{id}.vcf.gz", id=SAMPLES),
-        expand("results/variant_calling/{id}.vcf.gz.tbi", id=SAMPLES),
+        expand("results/variant_calling/{id}.ori.vcf.gz", id=SAMPLES),
+        expand("results/variant_calling/{id}.ori.vcf.gz.tbi", id=SAMPLES),
+        #Variant marking and index:
+        expand("results/variant_filtering/{id}.marked.vcf.gz", id=SAMPLES),
+        expand("results/variant_filtering/{id}.marked.vcf.gz.tbi", id=SAMPLES),
         #Variant filtering and index:
         expand("results/variant_filtering/{id}.filtered.vcf.gz", id=SAMPLES),
         expand("results/variant_filtering/{id}.filtered.vcf.gz.tbi", id=SAMPLES),

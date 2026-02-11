@@ -13,7 +13,7 @@ rule r08_01_variant_calling:
         ref_fai = config["reference"]["fasta"] + ".fai",
         script = "scripts/run_freebayes.sh"
     output:
-        vcf = "results/variant_calling/{id}.vcf.gz"
+        vcf = "results/variant_calling/{id}.ori.vcf.gz"
     log:
         "logs/08_variant_calling/{id}.freebayes.log"
     conda:
@@ -28,10 +28,10 @@ rule r08_01_variant_calling:
 
 rule r08_02_vcf_index:
     input:
-        vcf = "results/variant_calling/{id}.vcf.gz",
+        vcf = "results/variant_calling/{id}.ori.vcf.gz",
         script = "scripts/vcf_index.sh"
     output:
-        tbi = "results/variant_calling/{id}.vcf.gz.tbi"
+        tbi = "results/variant_calling/{id}.ori.vcf.gz.tbi"
     log:
         "logs/08_variant_calling/{id}.vcf_index.log"
     conda:
