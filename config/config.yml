@@ -24,6 +24,13 @@ paths:
   #path for the trimming results
   preprocessing_results: "results/preprocessing"
 
+
+##############################################################
+01_quality_control:
+  raw_fastqc_dir: "results/quality_control/raw_fastqc"
+  raw_multiqc_dir: "results/quality_control/raw_multiqc"
+
+
 ##############################################################
 # Trimming params
 trimming: 

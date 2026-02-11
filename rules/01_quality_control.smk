@@ -14,24 +14,29 @@ rule r01_01_raw_fastqc:
         "logs/01_quality_control/{id}.raw_fastqc.log"
     conda:
         "../envs/quality_control.yml"
+    params:
+        outdir = config["01_quality_control"]["raw_fastqc_dir"]
     shell:
         """
-        mkdir -p results/quality_control/raw_fastqc/.done
-        {input.script} {input.r1} {input.r2} results/quality_control/raw_fastqc > {log} 2>&1
+        mkdir -p {params.outdir}/.done
+        {input.script} {input.r1} {input.r2} {params.outdir} > {log} 2>&1
         touch {output.done}
         """
 
 rule r01_02_raw_multiqc:
-    input:  #Depend on .done directory
+    input:
         done = expand("results/quality_control/raw_fastqc/.done/{id}.fastqc.done", id=SAMPLES),
         script = "scripts/multiqc.sh"
     output:
-        "results/quality_control/raw_multiqc/multiqc_report.html"
+        config["01_quality_control"]["raw_multiqc_dir"] + "/multiqc_report.html"
     conda:
         "../envs/quality_control.yml"
     log:
         "logs/01_quality_control/raw_multiqc.log"
+    params:
+        fastqc_dir = config["01_quality_control"]["raw_fastqc_dir"],
+        outdir = config["01_quality_control"]["raw_multiqc_dir"]
     shell:
         """
-         {input.script} results/quality_control/raw_fastqc results/quality_control/raw_multiqc > {log} 2>&1
+        {input.script} {params.fastqc_dir} {params.outdir} > {log} 2>&1
         """
