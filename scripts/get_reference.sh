@@ -13,14 +13,18 @@ FASTA_GZ="${FASTA}.gz"
 
 mkdir -p "$(dirname "$FASTA")"
 
-## Download compressed fasta reference
-wget -O "$FASTA_GZ" "$URL"
+## Download compressed fasta reference if does not exists
+if [ ! -f "$FASTA" ]; then
+    wget -O "$FASTA_GZ" "$URL"
+    gunzip -f "$FASTA_GZ"
+fi
 
-## Decompress to FASTA 
-gunzip -f "$FASTA_GZ"
+## Create index for other processes if does not exists
+if [ ! -f "$FASTA.fai" ]; then
+    samtools faidx "$FASTA"
+fi
 
-## Create index for other processes
-samtools faidx "$FASTA"
-
-## Create index for bwa mapping
-bwa index "$FASTA"
+## Create index for bwa mapping if does not exists
+if [ ! -f "$FASTA.amb" ]; then
+    bwa index "$FASTA"
+fi
