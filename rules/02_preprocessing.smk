@@ -19,10 +19,17 @@ rule r02_01_trimming_fastp:
     conda:
         "../envs/preprocessing.yml"
     params:
-        minlen = get_minlen
+        minlen = get_minlen,
+        extra = config["trimming"]["fastp_extra_args"]
     shell:
         """
-        {input.script} {input.r1} {input.r2} {output.r1} {output.r2} {output.html} {output.json} {params.minlen} > {log} 2>&1
+        {input.script} \
+            {input.r1} {input.r2} \
+            {output.r1} {output.r2} \
+            {output.html} {output.json} \
+            {params.minlen} \
+            "{params.extra}"
+            > {log} 2>&1
         """
 
 #QUALITY_CONTROL POST-TRIMMING WITH FASTQC AND MULTIQC
@@ -38,10 +45,12 @@ rule r02_02_clean_fastqc:
         "logs/02_preprocessing/{id}.clean_fastqc.log"
     conda:
         "../envs/quality_control.yml"
+    params:
+        outdir = config["02_preprocessing"]["clean_fastqc_dir"]
     shell:
         """
-        mkdir -p results/quality_control/clean_fastqc/.done
-        {input.script} {input.r1} {input.r2} results/quality_control/clean_fastqc > {log} 2>&1
+        mkdir -p {params.outdir}/.done
+        {input.script} {input.r1} {input.r2} {params.outdir} > {log} 2>&1
         touch {output.done}
         """
 
@@ -55,7 +64,10 @@ rule r02_03_clean_multiqc:
         "logs/02_preprocessing/clean_multiqc.log"
     conda:
         "../envs/quality_control.yml"
+    params:
+        fastqc_dir = config["02_preprocessing"]["clean_fastqc_dir"],
+        outdir = config["02_preprocessing"]["clean_multiqc_dir"]
     shell:
         """
-         {input.script} results/quality_control/clean_fastqc results/quality_control/clean_multiqc > {log} 2>&1
+         {input.script} {params.fastqc_dir} {params.outdir} > {log} 2>&1
         """

@@ -32,7 +32,19 @@ paths:
 
 
 ##############################################################
-# Trimming params
-trimming: 
-  #trim by lenght
+02_preprocessing:
+  clean_fastqc_dir: "results/quality_control/clean_fastqc"
+  clean_multiqc_dir: "results/quality_control/clean_multiqc"
+
+trimming:
   min_length: 30
+  fastp_extra_args: >
+    --detect_adapter_for_pe
+    --trim_poly_g 
+    --trim_poly_x
+    --cut_tail
+    --cut_window_size 4 
+    --cut_mean_quality 20 
+    --qualified_quality_phred 20 
+    --unqualified_percent_limit 40 
+    --n_base_limit 5 
