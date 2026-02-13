@@ -3,16 +3,6 @@
 # Samples
 samples_table_path: "config/samples.tsv"
 
-
-#############################################################
-# Reference genome
-reference:
-  #local path where the reference genome in fasta will be stored
-  fasta: "data/reference/hg38.fa"
-  #url to download the reference genome
-  url: "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
-
-
 ##############################################################
 paths:
   #local path for the raw data
@@ -24,14 +14,14 @@ paths:
   #path for the trimming results
   preprocessing_results: "results/preprocessing"
 
-
 ##############################################################
+# Quality control module
 01_quality_control:
   raw_fastqc_dir: "results/quality_control/raw_fastqc"
   raw_multiqc_dir: "results/quality_control/raw_multiqc"
 
-
 ##############################################################
+# Preprocessing module
 02_preprocessing:
   clean_fastqc_dir: "results/quality_control/clean_fastqc"
   clean_multiqc_dir: "results/quality_control/clean_multiqc"
@@ -48,3 +38,14 @@ trimming:
     --qualified_quality_phred 20 
     --unqualified_percent_limit 40 
     --n_base_limit 5 
+
+#############################################################
+# Reference genome
+03_reference:
+  #local path where the reference genome in fasta will be stored
+  fasta: "data/reference/hg38.fa"
+  #url to download the reference genome
+  url: "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+
+################################################################
+# Mapping 

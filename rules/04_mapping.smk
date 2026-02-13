@@ -10,9 +10,9 @@ rule r04_01_bwa_mapping:
         script = "scripts/run_mapping.sh",
         r1 = "data/clean/{id}_R1.trimmed.fastq.gz",
         r2 = "data/clean/{id}_R2.trimmed.fastq.gz",
-        reference = config["reference"]["fasta"],
+        reference = config["03_reference"]["fasta"],
         bwa_index = expand(
-            config["reference"]["fasta"] + ".{ext}",
+            config["03_reference"]["fasta"] + ".{ext}",
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         )
     output:

@@ -8,16 +8,16 @@ rule r03_01_get_reference:
     input:
         script = "scripts/get_reference.sh",
     output:
-        fasta = config["reference"]["fasta"],
-        fai = config["reference"]["fasta"] + ".fai",
+        fasta = config["03_reference"]["fasta"],
+        fai = config["03_reference"]["fasta"] + ".fai",
         bwa_index = expand(
-            config["reference"]["fasta"] + ".{ext}",
+            config["03_reference"]["fasta"] + ".{ext}",
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         )
     log:
         "logs/03_get_reference/get_reference.log"
     params: 
-        url=config["reference"]["url"]
+        url=config["03_reference"]["url"]
     conda:
         "../envs/get_reference.yml"
     shell: 
