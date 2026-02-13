@@ -16,8 +16,7 @@ rule r04_01_bwa_mapping:
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         )
     output:
-        sam = "results/mapping/{id}.sam",
-        error = "results/mapping/stderr/{id}.error"
+        sam = "results/mapping/{id}.sam"
     log:
         "logs/04_mapping/{id}.bwa_mapping.log"
     conda:
@@ -25,7 +24,7 @@ rule r04_01_bwa_mapping:
     threads: 10
     shell:
         """
-        {input.script} {input.reference} {input.r1} {input.r2} {output.sam} {output.error} {threads} > {log} 2>&1
+        {input.script} {input.reference} {input.r1} {input.r2} {output.sam} {threads} > {log} 2>&1
         """
 
 #Rule to transform the sam file into bam fle
