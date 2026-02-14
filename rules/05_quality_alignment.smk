@@ -35,7 +35,16 @@ rule r05_02_qualimap:
     conda:
         "../envs/quality_alignment.yml"
     threads: 10
+    params:
+        java_mem = config["05_quality_alignment"]["qualimap_java_mem"],
+        genome = config["05_quality_alignment"]["qualimap_genome"]
     shell:
         """
-        {input.script} {input.bam_sorted} {output.qualimap_directory} {threads} > {log} 2>&1
+        {input.script} \
+            {input.bam_sorted} \
+            {output.qualimap_directory} \
+            {threads} \
+            {params.java_mem} \
+            {params.genome} \
+            > {log} 2>&1
         """
