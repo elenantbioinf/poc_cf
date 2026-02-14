@@ -9,6 +9,9 @@
 BAM_SORTED="$1"
 OUT_BAM="$2"
 SAMPLE="$3"
+RGLB="$4"
+RGPL="$5"
+RGPU="$6"
 
 mkdir -p "$(dirname "$OUT_BAM")"
 
@@ -16,7 +19,7 @@ picard AddOrReplaceReadGroups \
   INPUT="$BAM_SORTED" \
   OUTPUT="$OUT_BAM" \
   RGID="$SAMPLE" \
-  RGLB="lib1" \
-  RGPL="ILLUMINA" \
-  RGPU="unit1" \
+  RGLB="$RGLB" \
+  RGPL="$RGPL" \
+  RGPU="$RGPU" \
   RGSM="$SAMPLE" 

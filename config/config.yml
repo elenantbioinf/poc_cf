@@ -52,3 +52,14 @@ trimming:
 05_quality_alignment:
   qualimap_java_mem: "10G"
   qualimap_genome: "HUMAN"
+
+################################################################
+# Mark duplicates
+06_mark_duplicates:
+  read_groups:
+    rglb: "lib1"
+    rgpl: "ILLUMINA"
+    rgpu: "unit1"
+  mark_duplicates:
+    assume_sorted: true
+    remove_duplicates: false

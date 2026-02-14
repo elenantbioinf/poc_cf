@@ -14,9 +14,20 @@ rule r06_01_add_read_groups:
         "logs/06_mark_duplicates/{id}.add_read_groups.log"
     conda:
         "../envs/mark_duplicates.yml"
+    params:
+        rglb = config["06_mark_duplicates"]["read_groups"]["rglb"],
+        rgpl = config["06_mark_duplicates"]["read_groups"]["rgpl"],
+        rgpu = config["06_mark_duplicates"]["read_groups"]["rgpu"]
     shell:
         """
-        {input.script} {input.bam_sorted} {output.bam_rg} {wildcards.id} > {log} 2>&1
+        {input.script} \
+            {input.bam_sorted} \
+            {output.bam_rg} \
+            {wildcards.id} \
+            {params.rglb} \
+            {params.rgpl} \
+            {params.rgpu} \
+            > {log} 2>&1
         """
 
 # Index rg.bam
@@ -50,9 +61,18 @@ rule r06_03_mark_duplicates:
         "logs/06_mark_duplicates/{id}.mark_duplicates.log"
     conda:
         "../envs/mark_duplicates.yml"
+    params:
+        remove_duplicates = config["06_mark_duplicates"]["mark_duplicates"]["remove_duplicates"],
+        assume_sorted = config["06_mark_duplicates"]["mark_duplicates"]["assume_sorted"]
     shell:
         """
-        {input.script} {input.bam_rg} {output.bam_dedup} {output.metrics} > {log} 2>&1
+        {input.script} \
+            {input.bam_rg} \
+            {output.bam_dedup} \
+            {output.metrics} \
+            {params.remove_duplicates} \
+            {params.assume_sorted} \
+            > {log} 2>&1
         """
 
 # Index dedup.bam
