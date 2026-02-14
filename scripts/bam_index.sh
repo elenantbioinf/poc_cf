@@ -5,5 +5,6 @@
 ######################################
 
 BAM_SORTED="$1"
+THREADS="$2"
 
-samtools index "$BAM_SORTED"
+samtools index -@ "$THREADS" "$BAM_SORTED"

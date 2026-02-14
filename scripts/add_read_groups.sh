@@ -9,11 +9,8 @@
 BAM_SORTED="$1"
 OUT_BAM="$2"
 SAMPLE="$3"
-THREADS="$4"
 
 mkdir -p "$(dirname "$OUT_BAM")"
-
-#Add the read groups
 
 picard AddOrReplaceReadGroups \
   INPUT="$BAM_SORTED" \
@@ -23,7 +20,3 @@ picard AddOrReplaceReadGroups \
   RGPL="ILLUMINA" \
   RGPU="unit1" \
   RGSM="$SAMPLE" 
-
-# Index the bam.rg
-
-samtools index -@ "$THREADS" "$OUT_BAM"
