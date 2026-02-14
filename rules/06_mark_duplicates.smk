@@ -42,7 +42,7 @@ rule r06_03_mark_duplicates:
     input:
         bam_rg = "results/mark_duplicates/{id}.sorted.rg.bam",
         bai_rg = "results/mark_duplicates/{id}.sorted.rg.bam.bai",
-        script = "scripts/run_picard.sh"
+        script = "scripts/mark_duplicates.sh"
     output:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         metrics = "results/mark_duplicates/{id}_mark_duplicates_metrics.txt"
