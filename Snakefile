@@ -34,15 +34,14 @@ rule all:
         #Preprocessing: Quality control after trimming
         "results/quality_control/clean_multiqc/multiqc_report.html",
         #Reference genome
-        config["reference"]["fasta"],
-        config["reference"]["fasta"] + ".fai",
+        config["03_reference"]["fasta"],
+        config["03_reference"]["fasta"] + ".fai",
         expand(
-            config["reference"]["fasta"] + ".{ext}",
+            config["03_reference"]["fasta"] + ".{ext}",
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         ),
         #Mapping
         expand("results/mapping/{id}.sam", id = SAMPLES),
-        expand("results/mapping/stderr/{id}.error", id=SAMPLES),
         #SAM_to_BAM
         expand("results/mapping/{id}.unsorted.bam", id=SAMPLES),
         #BAM_sorted:

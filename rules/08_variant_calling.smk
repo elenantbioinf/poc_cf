@@ -9,8 +9,8 @@ rule r08_01_variant_calling:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
         bed = "data/database_cftr/cftr_mane_select_exons.bed",
-        ref = config["reference"]["fasta"],
-        ref_fai = config["reference"]["fasta"] + ".fai",
+        ref = config["03_reference"]["fasta"],
+        ref_fai = config["03_reference"]["fasta"] + ".fai",
         script = "scripts/run_freebayes.sh"
     output:
         vcf = "results/variant_calling/{id}.ori.vcf.gz"
