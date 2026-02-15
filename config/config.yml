@@ -63,3 +63,10 @@ trimming:
   mark_duplicates:
     assume_sorted: true
     remove_duplicates: false
+
+################################################################
+# Coverage
+07_coverage:
+  bed: "data/database_cftr/cftr_mane_select_exons.bed"
+  thresholds: "10,20,30,40"
+  extra_args: "--no-per-base --flag 1024"

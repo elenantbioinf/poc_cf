@@ -9,7 +9,7 @@ rule r07_01_coverage:
     input:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
-        bed = "data/database_cftr/cftr_mane_select_exons.bed",
+        bed = config["07_coverage"]["bed"],
         script = "scripts/coverage_mosdepth.sh"
     output:
         regions = "results/coverage/{id}.regions.bed.gz"
@@ -17,7 +17,17 @@ rule r07_01_coverage:
         "logs/07_coverage/{id}.mosdepth.log"
     conda:
         "../envs/coverage.yml"
+    params:
+        thresholds = config["07_coverage"]["thresholds"],
+        extra_args = config["07_coverage"]["extra_args"],
+        prefix = "results/coverage/{id}"
     shell:
         """
-        {input.script} {input.bam_dedup} {input.bed} results/coverage/{wildcards.id} > {log} 2>&1
+        {input.script} \
+            {input.bam_dedup} \
+            {input.bed} \
+            {params.prefix} \
+            {params.thresholds} \
+            {params.extra_args} \
+            > {log} 2>&1
         """
