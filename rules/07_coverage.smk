@@ -9,7 +9,7 @@ rule r07_01_coverage:
     input:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
-        bed = config["07_coverage"]["bed"],
+        bed = config["target_region"]["bed"],
         script = "scripts/coverage_mosdepth.sh"
     output:
         regions = "results/coverage/{id}.regions.bed.gz"
