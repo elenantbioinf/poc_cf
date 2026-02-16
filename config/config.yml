@@ -74,3 +74,8 @@ target_region:
 07_coverage:
   thresholds: "10,20,30,40"
   extra_args: "--no-per-base --flag 1024"
+
+################################################################
+# Variant calling
+08_variant_calling:
+  extra_args: "-C 5 --ploidy 2 --min-mapping-quality 20"

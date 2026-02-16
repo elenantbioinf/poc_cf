@@ -8,7 +8,7 @@ rule r08_01_variant_calling:
     input:
         bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
         bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
-        bed = "data/database_cftr/cftr_mane_select_exons.bed",
+        bed = config["target_region"]["bed"],
         ref = config["03_reference"]["fasta"],
         ref_fai = config["03_reference"]["fasta"] + ".fai",
         script = "scripts/run_freebayes.sh"
@@ -18,10 +18,17 @@ rule r08_01_variant_calling:
         "logs/08_variant_calling/{id}.freebayes.log"
     conda:
         "../envs/variant_calling.yml"
-    threads: 5
+    params:
+        extra_args = config["08_variant_calling"]["extra_args"]
     shell:
         """
-        {input.script} {input.bam_dedup} {input.ref} {input.bed} {output.vcf} {threads} > {log} 2>&1
+        {input.script} \
+            {input.bam_dedup} \
+            {input.ref} \
+            {input.bed} \
+            {output.vcf} \
+            {params.extra_args} \
+            > {log} 2>&1
         """
 
 # Rule for index the vcf file with tabix

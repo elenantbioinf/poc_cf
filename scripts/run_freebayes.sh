@@ -9,14 +9,12 @@ BAM_DEDUP="$1"
 REF="$2"
 BED="$3"
 OUT_VCF="$4"
-THREADS="$5"
+EXTRA_ARGS="$5"
 
 mkdir -p "$(dirname "$OUT_VCF")"
 
 freebayes \
-    -C 5 \
-    --ploidy 2 \
-    --min-mapping-quality 20 \
+    $EXTRA_ARGS \
     -f "$REF" \
     -t "$BED" \
     "$BAM_DEDUP" \
