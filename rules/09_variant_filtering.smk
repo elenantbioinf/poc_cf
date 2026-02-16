@@ -14,14 +14,20 @@ rule r09_01_mark_variants_bcftools:
     log:
         "logs/09_variant_filtering/{id}.bcftools_mark.log"
     params:
-        min_coverage = 5,
-        min_quality = 20
+        min_coverage = config["09_variant_filtering"]["min_coverage"],
+        min_quality = config["09_variant_filtering"]["min_quality"]
     conda:
         "../envs/variant_filtering.yml"
     threads: 10
     shell:
         """
-        {input.script} {input.vcf} {output.vcf_marked} {params.min_coverage} {params.min_quality} {threads} > {log} 2>&1
+        {input.script} \
+            {input.vcf} \
+            {output.vcf_marked} \
+            {params.min_coverage} \
+            {params.min_quality} \
+            {threads} \
+            > {log} 2>&1
         """
 
 # Rule for index the marked vcf file

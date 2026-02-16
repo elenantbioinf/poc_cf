@@ -79,3 +79,9 @@ target_region:
 # Variant calling
 08_variant_calling:
   extra_args: "-C 5 --ploidy 2 --min-mapping-quality 20"
+
+################################################################
+# Variant filtering
+09_variant_filtering:
+  min_coverage: "5"
+  min_quality: "20"
