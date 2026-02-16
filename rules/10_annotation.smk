@@ -14,9 +14,17 @@ rule r10_01_extract_variants:
         "logs/10_annotation/{id}.extract_variants.log"
     conda:
         "../envs/annotation.yml"
+    params:
+        header = config["10_annotation"]["header"], 
+        query_format = config["10_annotation"]["query_format"]
     shell:
         """
-        {input.script} {input.vcf_filtered} {output.tsv} > {log} 2>&1
+        {input.script} \
+            {input.vcf_filtered} \
+            {output.tsv} \
+            "{params.header}" \
+            "{params.query_format}" \
+            > {log} 2>&1
         """
 
 # Verification that there are variants to annotation

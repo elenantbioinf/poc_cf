@@ -85,3 +85,9 @@ target_region:
 09_variant_filtering:
   min_coverage: "5"
   min_quality: "20"
+
+################################################################
+# Annotation
+10_annotation:
+  header: "CHROM\tPOS\tID\tREF\tALT"
+  query_format: "%CHROM\t%POS\t%ID\t%REF\t%ALT\n"

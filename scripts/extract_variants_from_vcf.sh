@@ -7,12 +7,14 @@
 
 VCF_FILTERED="$1"
 OUT_TSV="$2"
+HEADER="$3"
+QUERY_FORMAT="$4"
 
 mkdir -p "$(dirname "$OUT_TSV")"
 
 
 #Generate variants tsv
 
-echo -e "CHROM\tPOS\tID\tREF\tALT" > "$OUT_TSV"
+echo -e "$HEADER" > "$OUT_TSV"
 
-bcftools query -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\n' "$VCF_FILTERED" >> "$OUT_TSV"
+bcftools query -f "$QUERY_FORMAT" "$VCF_FILTERED" >> "$OUT_TSV"
