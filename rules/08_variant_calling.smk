@@ -27,7 +27,7 @@ rule r08_01_variant_calling:
             {input.ref} \
             {input.bed} \
             {output.vcf} \
-            {params.extra_args} \
+            "{params.extra_args}" \
             > {log} 2>&1
         """
 
