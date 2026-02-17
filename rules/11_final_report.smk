@@ -13,7 +13,22 @@ rule r11_01_final_report:
         "logs/11_final_report/{id}.final_report.log"
     conda:
         "../envs/final_report.yml"
+    params:
+        reference = config["03_reference"]["genome_build"],
+        out_dir = config["11_final_report"]["out_dir"],
+        disease = config["11_final_report"]["disease"],
+        gene = config["11_final_report"]["gene"],
+        sample_id = "{id}"
     shell:
         """
-        python {input.script} {input.annotation} {input.check} {output.report} > {log} 2>&1
+        python {input.script} \
+            {input.annotation} \
+            {input.check} \
+            {output.report} \
+            "{params.out_dir}" \
+            "{params.disease}" \
+            "{params.gene}" \
+            "{params.reference}" \
+            "{params.sample_id}" \
+            > {log} 2>&1
         """

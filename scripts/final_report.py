@@ -11,6 +11,12 @@ import sys
 ANNOTATION_TSV = sys.argv[1]
 CHECK_TXT = sys.argv[2]
 OUT_TXT = sys.argv[3]
+OUTDIR = sys.argv[4]
+DISEASE = sys.argv[5]
+GENE = sys.argv[6]
+REFERENCE = sys.argv[7]
+SAMPLE_ID = sys.argv[8]
+
 
 
 #=================Lectura del archivo de chequeo==========
@@ -51,22 +57,25 @@ else:
     #Construir el reporte
 
     report_text = []
+    report_text.append("FINAL ANALYSIS REPORT\n\n")
+    report_text.append(f"Sample ID: {SAMPLE_ID}\n")
+    report_text.append(f"Disease: {DISEASE}\n")
+    report_text.append(f"Target gene: {GENE}\n")
+    report_text.append(f"Reference genome: {REFERENCE}\n\n")
     report_text.append("VARIANTS DETECTED IN YOUR ANALYSIS\n\n")
     report_text.append(
         f"Number of variant annotations in non-MANE transcripts: {variant_no_mane}\n\n"
         )
 
     if variant_mane is not None:
-        sample = variant_mane[header.index("sample_id")]
-        gene = variant_mane[header.index("gene")]
+        gene_annot = variant_mane[header.index("gene")]
         protein = variant_mane[header.index("protein")]
         hgvs_c = variant_mane[header.index("hgvs_c")]
         transcript = variant_mane[header.index("transcript")]
         exon = variant_mane[header.index("exon")]
 
         report_text.append("Variant detected in MANE transcript:\n\n")
-        report_text.append(f"Your sample ID: {sample}\n")
-        report_text.append(f"Gene: {gene}\n")
+        report_text.append(f"Gene: {gene_annot}\n")
         report_text.append(f"Transcript (MANE): {transcript}\n")
         report_text.append(f"Protein: {protein}\n")
         report_text.append(f"HGVS_C: {hgvs_c}\n")
@@ -80,7 +89,7 @@ else:
 
 import os
 
-os.makedirs("final_report", exist_ok=True)
+os.makedirs(OUTDIR, exist_ok=True)
 
 # ============== Generación del archivo resultante (de momento texto)
 with open(OUT_TXT, "w") as out:

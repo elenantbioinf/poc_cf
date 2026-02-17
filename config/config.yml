@@ -46,6 +46,8 @@ trimming:
   fasta: "data/reference/hg38.fa"
   #url to download the reference genome
   url: "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+  #genome
+  genome_build: "GRCh38"
 
 ################################################################
 # Target region (CFTR)
@@ -91,3 +93,10 @@ target_region:
 10_annotation:
   header: "CHROM\tPOS\tID\tREF\tALT"
   query_format: "%CHROM\t%POS\t%ID\t%REF\t%ALT\n"
+
+################################################################
+# Final_report
+11_final_report:
+  disease: "Cystic Fibrosis"
+  out_dir: "final_report"
+  gene: "CFTR"
