@@ -5,6 +5,7 @@
 ###############################################
 
 import sys
+import os
 
 #================Variables necesarias=========================
 
@@ -24,10 +25,20 @@ SAMPLE_ID = sys.argv[8]
 with open(CHECK_TXT) as check:
     status = check.read().strip()
 
+#=================Creación de la cabecera del reporte final==========
+
+report_text = []
+report_text.append("FINAL ANALYSIS REPORT\n\n")
+report_text.append(f"Sample ID: {SAMPLE_ID}\n")
+report_text.append(f"Disease: {DISEASE}\n")
+report_text.append(f"Target gene: {GENE}\n")
+report_text.append(f"Reference genome: {REFERENCE}\n\n")
+
 # =============Primer caso: no hay variantes anotadas
 
 if status == "NO VARIANTS DETECTED":
-    result = "NO VARIANTS DETECTED IN YOUR ANALYSIS\n"
+    report_text.append("NO VARIANTS DETECTED IN YOUR ANALYSIS\n")
+    result = "".join(report_text)
 
 # =============Segundo caso: si hay variantes anotadas
 
@@ -56,12 +67,7 @@ else:
     
     #Construir el reporte
 
-    report_text = []
-    report_text.append("FINAL ANALYSIS REPORT\n\n")
-    report_text.append(f"Sample ID: {SAMPLE_ID}\n")
-    report_text.append(f"Disease: {DISEASE}\n")
-    report_text.append(f"Target gene: {GENE}\n")
-    report_text.append(f"Reference genome: {REFERENCE}\n\n")
+   
     report_text.append("VARIANTS DETECTED IN YOUR ANALYSIS\n\n")
     report_text.append(
         f"Number of variant annotations in non-MANE transcripts: {variant_no_mane}\n\n"
@@ -86,8 +92,6 @@ else:
     result = "".join(report_text)
 
 #==================Creación del directorio si no existe
-
-import os
 
 os.makedirs(OUTDIR, exist_ok=True)
 
