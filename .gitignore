@@ -19,6 +19,8 @@ data/reference/*
 
 !data/database_cftr/
 
+!data/test/
+
 !results/README.md
 
 !final_report/README.md
