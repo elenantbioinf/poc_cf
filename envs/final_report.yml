@@ -1,4 +1,4 @@
-name: annotation
+name: final_report
 channels:
   - conda-forge
   - bioconda
