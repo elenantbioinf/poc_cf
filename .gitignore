@@ -3,6 +3,7 @@ data/*
 results/*
 final_report/*
 logs/*
+visual/*
 
 # Keep the directory structure via README files
 !data/raw/
@@ -30,6 +31,8 @@ data/reference/*
 logs/*/*
 !logs/*/README.md
 
+!visual/README.md
+!visual/dag.png
 
 #ignore snakemake cache
 .snakemake
