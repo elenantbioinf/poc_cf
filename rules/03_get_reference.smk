@@ -19,7 +19,7 @@ rule r03_01_get_reference:
     params: 
         url=config["03_reference"]["url"]
     conda:
-        "../envs/get_reference.yml"
+        "../envs/03_get_reference.yml"
     shell: 
         """
         {input.script} {params.url} {output.fasta} > {log} 2>&1

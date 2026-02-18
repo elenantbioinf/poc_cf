@@ -17,7 +17,7 @@ rule r09_01_mark_variants_bcftools:
         min_coverage = config["09_variant_filtering"]["min_coverage"],
         min_quality = config["09_variant_filtering"]["min_quality"]
     conda:
-        "../envs/variant_filtering.yml"
+        "../envs/09_variant_filtering.yml"
     threads: 10
     shell:
         """
@@ -41,7 +41,7 @@ rule r09_02_vcf_marked_index:
     log:
         "logs/09_variant_filtering/{id}.marked_vcf_index.log"
     conda:
-        "../envs/variant_filtering.yml"
+        "../envs/09_variant_filtering.yml"
     shell:
         """
         {input.script} {input.vcf_marked} > {log} 2>&1
@@ -58,7 +58,7 @@ rule r09_03_filter_pass:
     log:
         "logs/09_variant_filtering/{id}.filter_pass.log"
     conda:
-        "../envs/variant_filtering.yml"
+        "../envs/09_variant_filtering.yml"
     threads: 10
     shell:
         """
@@ -76,7 +76,7 @@ rule r09_04_filtered_vcf_index:
     log:
         "logs/09_variant_filtering/{id}.filtered_vcf_index.log"
     conda:
-        "../envs/variant_filtering.yml"
+        "../envs/09_variant_filtering.yml"
     shell:
         """
         {input.script} {input.vcf} > {log} 2>&1

@@ -13,7 +13,7 @@ rule r01_01_raw_fastqc:
     log:
         "logs/01_quality_control/{id}.raw_fastqc.log"
     conda:
-        "../envs/quality_control.yml"
+        "../envs/01_quality_control.yml"
     params:
         outdir = config["01_quality_control"]["raw_fastqc_dir"]
     shell:
@@ -30,7 +30,7 @@ rule r01_02_raw_multiqc:
     output:
         config["01_quality_control"]["raw_multiqc_dir"] + "/multiqc_report.html"
     conda:
-        "../envs/quality_control.yml"
+        "../envs/01_quality_control.yml"
     log:
         "logs/01_quality_control/raw_multiqc.log"
     params:

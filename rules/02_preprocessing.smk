@@ -17,7 +17,7 @@ rule r02_01_trimming_fastp:
     log:
         "logs/02_preprocessing/{id}.fastp.log"
     conda:
-        "../envs/preprocessing.yml"
+        "../envs/02_preprocessing.yml"
     params:
         minlen = get_minlen,
         extra = config["trimming"]["fastp_extra_args"]
@@ -44,7 +44,7 @@ rule r02_02_clean_fastqc:
     log:
         "logs/02_preprocessing/{id}.clean_fastqc.log"
     conda:
-        "../envs/quality_control.yml"
+        "../envs/01_quality_control.yml"
     params:
         outdir = config["02_preprocessing"]["clean_fastqc_dir"]
     shell:
@@ -63,7 +63,7 @@ rule r02_03_clean_multiqc:
     log:
         "logs/02_preprocessing/clean_multiqc.log"
     conda:
-        "../envs/quality_control.yml"
+        "../envs/01_quality_control.yml"
     params:
         fastqc_dir = config["02_preprocessing"]["clean_fastqc_dir"],
         outdir = config["02_preprocessing"]["clean_multiqc_dir"]

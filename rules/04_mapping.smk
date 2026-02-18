@@ -20,7 +20,7 @@ rule r04_01_bwa_mapping:
     log:
         "logs/04_mapping/{id}.bwa_mapping.log"
     conda:
-        "../envs/mapping.yml"
+        "../envs/04_mapping.yml"
     threads: 10
     shell:
         """
@@ -38,7 +38,7 @@ rule r04_02_sam_to_bam:
     log:
         "logs/04_mapping/{id}.sam_to_bam.log"
     conda:
-        "../envs/mapping.yml"
+        "../envs/04_mapping.yml"
     threads: 10
     shell:
         """
@@ -56,7 +56,7 @@ rule r04_03_bam_sort:
     log:
         "logs/04_mapping/{id}.bam_sort.log"
     conda: 
-        "../envs/mapping.yml"
+        "../envs/04_mapping.yml"
     threads: 10
     shell:
         """
@@ -74,7 +74,7 @@ rule r04_04_bam_index:
     log:
         "logs/04_mapping/{id}.bam_index.log"
     conda: 
-        "../envs/mapping.yml"
+        "../envs/04_mapping.yml"
     shell:
         """
         {input.script} {input.bam_sorted} > {log} 2>&1

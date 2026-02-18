@@ -17,7 +17,7 @@ rule r08_01_variant_calling:
     log:
         "logs/08_variant_calling/{id}.freebayes.log"
     conda:
-        "../envs/variant_calling.yml"
+        "../envs/08_variant_calling.yml"
     params:
         extra_args = config["08_variant_calling"]["extra_args"]
     shell:
@@ -42,7 +42,7 @@ rule r08_02_vcf_index:
     log:
         "logs/08_variant_calling/{id}.vcf_index.log"
     conda:
-        "../envs/variant_calling.yml"
+        "../envs/08_variant_calling.yml"
     shell:
         """
         {input.script} {input.vcf} > {log} 2>&1

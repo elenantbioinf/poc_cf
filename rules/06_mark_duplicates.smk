@@ -13,7 +13,7 @@ rule r06_01_add_read_groups:
     log:
         "logs/06_mark_duplicates/{id}.add_read_groups.log"
     conda:
-        "../envs/mark_duplicates.yml"
+        "../envs/06_mark_duplicates.yml"
     params:
         rglb = config["06_mark_duplicates"]["read_groups"]["rglb"],
         rgpl = config["06_mark_duplicates"]["read_groups"]["rgpl"],
@@ -41,7 +41,7 @@ rule r06_02_index_rg_bam:
     log:
         "logs/06_mark_duplicates/{id}.index_rg_bam.log"
     conda:
-        "../envs/mark_duplicates.yml"
+        "../envs/06_mark_duplicates.yml"
     threads: 2
     shell:
         """
@@ -60,7 +60,7 @@ rule r06_03_mark_duplicates:
     log:
         "logs/06_mark_duplicates/{id}.mark_duplicates.log"
     conda:
-        "../envs/mark_duplicates.yml"
+        "../envs/06_mark_duplicates.yml"
     params:
         remove_duplicates = config["06_mark_duplicates"]["mark_duplicates"]["remove_duplicates"],
         assume_sorted = config["06_mark_duplicates"]["mark_duplicates"]["assume_sorted"]
@@ -85,7 +85,7 @@ rule r06_04_index_dedup_bam:
     log:
         "logs/06_mark_duplicates/{id}.index_dedup_bam.log"
     conda:
-        "../envs/mark_duplicates.yml"
+        "../envs/06_mark_duplicates.yml"
     threads: 2
     shell: 
         """

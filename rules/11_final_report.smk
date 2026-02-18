@@ -12,7 +12,7 @@ rule r11_01_final_report:
     log:
         "logs/11_final_report/{id}.final_report.log"
     conda:
-        "../envs/final_report.yml"
+        "../envs/11_final_report.yml"
     params:
         reference = config["03_reference"]["genome_build"],
         out_dir = config["11_final_report"]["out_dir"],

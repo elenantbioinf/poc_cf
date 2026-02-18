@@ -14,7 +14,7 @@ rule r05_01_alignment_flagstat:
     log:
         "logs/05_quality_alignment/{id}.flagstat.log"
     conda:
-        "../envs/quality_alignment.yml"
+        "../envs/05_quality_alignment.yml"
     threads: 10
     shell:
         """
@@ -33,7 +33,7 @@ rule r05_02_qualimap:
     log:
         "logs/05_quality_alignment/{id}.qualimap.log"
     conda:
-        "../envs/quality_alignment.yml"
+        "../envs/05_quality_alignment.yml"
     threads: 10
     params:
         java_mem = config["05_quality_alignment"]["qualimap_java_mem"],

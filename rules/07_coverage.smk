@@ -16,7 +16,7 @@ rule r07_01_coverage:
     log:
         "logs/07_coverage/{id}.mosdepth.log"
     conda:
-        "../envs/coverage.yml"
+        "../envs/07_coverage.yml"
     params:
         thresholds = config["07_coverage"]["thresholds"],
         extra_args = config["07_coverage"]["extra_args"],

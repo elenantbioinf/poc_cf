@@ -13,7 +13,7 @@ rule r10_01_extract_variants:
     log:
         "logs/10_annotation/{id}.extract_variants.log"
     conda:
-        "../envs/annotation.yml"
+        "../envs/10_annotation.yml"
     params:
         header = config["10_annotation"]["header"], 
         query_format = config["10_annotation"]["query_format"]
@@ -38,7 +38,7 @@ rule r10_02_check_variants:
     log: 
         "logs/10_annotation/{id}.check_variants.log"
     conda:
-        "../envs/annotation.yml"
+        "../envs/10_annotation.yml"
     shell:
         """
         {input.script} {input.variant_tsv} {output.check} > {log} 2>&1
@@ -56,7 +56,7 @@ rule r10_03_rest_vep_annotation:
     output:
         annotation = "results/annotation/{id}.vep.tsv"
     conda:
-        "../envs/annotation.yml"
+        "../envs/10_annotation.yml"
     shell:
         """
         python {input.script} {input.tsv} {input.check} {output.annotation} {wildcards.id} > {log} 2>&1
