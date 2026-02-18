@@ -77,3 +77,15 @@ rule all:
         expand("results/annotation/{id}.vep.tsv", id=SAMPLES),
         #Generate the final report:
         expand("final_report/{id}.final_report.txt", id=SAMPLES)
+
+#DAG execution
+
+onsuccess:
+    import os
+    import subprocess
+    dag_config = config["00_workflow_dag"]
+    subprocess.run(
+        ["bash", "scripts/dag.sh", dag_config["dag_dir"], dag_config["log_dir"]],
+        check=True,
+        cwd=os.path.dirname(workflow.snakefile)
+    )

@@ -15,6 +15,12 @@ paths:
   preprocessing_results: "results/preprocessing"
 
 ##############################################################
+# Automatic generation of DAG
+00_workflow_dag:
+  dag_dir: "visual"
+  log_dir: "logs/00_workflow_dag"
+
+##############################################################
 # Quality control module
 01_quality_control:
   raw_fastqc_dir: "results/quality_control/raw_fastqc"
