@@ -13,7 +13,6 @@ DAG_LOG="${LOG_DIR}/dag.log"
 mkdir -p "${DAG_DIR}"
 mkdir -p "${LOG_DIR}"
 
-snakemake --dry-run --dag  2> "${DAG_LOG}" \
-    | tail -n +2 > "${DAG_DOT}"
+snakemake --dry-run --dag dot 2> "${DAG_LOG}"
 
 dot -Tpng "${DAG_DOT}" -o "${DAG_PNG}"
