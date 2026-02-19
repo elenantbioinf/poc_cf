@@ -84,8 +84,17 @@ onsuccess:
     import os
     import subprocess
     dag_config = config["00_workflow_dag"]
+    cwd = os.path.dirname(workflow.snakefile)
     subprocess.run(
         ["bash", "scripts/dag.sh", dag_config["dag_dir"], dag_config["log_dir"]],
         check=True,
-        cwd=os.path.dirname(workflow.snakefile)
+        cwd=cwd
+    )
+    subprocess.run(
+        ["bash", "scripts/dag_final_report.sh", 
+        dag_config["dag_dir"], 
+        dag_config["log_dir"],
+        dag_config["final_target"]],
+        check=True,
+        cwd=cwd
     )
