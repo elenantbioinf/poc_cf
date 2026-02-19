@@ -32,7 +32,6 @@ logs/*/*
 !logs/*/README.md
 
 !visual/README.md
-!visual/dag.png
 
 #ignore snakemake cache
 .snakemake
