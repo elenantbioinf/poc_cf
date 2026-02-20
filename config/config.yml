@@ -5,14 +5,13 @@ samples_table_path: "config/samples.tsv"
 
 ##############################################################
 paths:
-  #local path for the raw data
   raw_reads: "data/raw"
-  #sequencing type
   paired_end: true
-  #local path for the clean data (after trimming)
   clean_reads: "data/clean"
-  #path for the trimming results
-  preprocessing_results: "results/preprocessing"
+  results_dir: "results"
+  logs_dir: "logs"
+  visual_dir: "visual"
+  final_report_dir: "final_report"
 
 ##############################################################
 # Automatic generation of DAG
