@@ -59,7 +59,7 @@ trimming:
 ################################################################
 # Target region (CFTR)
 target_region:
-  bed: "data/database_cftr/cftr_mane_select_exons.bed"
+  bed: "test/database_cftr/cftr_mane_select_exons.bed"
 
 ################################################################
 # Quality alignment
