@@ -34,14 +34,20 @@ if status == "NO VARIANTS DETECTED":
 
 
 #===========Lectura de la variante del tsv generado por bcftools query=================
+variants = []
 
 with open(VARIANTS_TSV) as variant_file:
     next(variant_file)
-    first_line = variant_file.readline()
 
-chrom, pos, rs_id, ref, alt = first_line.strip().split("\t")
+    for line in variant_file:
+        line = line.strip()
+        if not line:
+            continue
 
-variant = f"{chrom} {pos} {rs_id} {ref} {alt}"
+        chrom, pos, rs_id, ref, alt = line.split("\t")
+
+        variant_string = f"{chrom} {pos} {rs_id} {ref} {alt}"
+        variants.append(variant_string)
 
 #====================Llamada al VEP rest api=================================
 
@@ -50,7 +56,7 @@ server = "https://rest.ensembl.org"
 endpoint = "/vep/homo_sapiens/region"
 
 payload = {
-    "variants": [variant]
+    "variants": variants
 }
 
 params = {
@@ -74,30 +80,40 @@ response = requests.post(
     json=payload
 )
 
+response.raise_for_status()
+
 data = response.json()
 
 
 #=======================Creacion de la tabla=============================
-
-table = data[0].get("transcript_consequences", [])
-
 rows = []
 
-for tab in table:
-  rows.append({
-      "sample_id": SAMPLE_ID,
-      "gene": tab.get("gene_symbol"),
-      "transcript": tab.get("transcript_id"),
-      "consequence": ",".join(tab.get("consequence_terms", [])) if tab.get("consequence_terms") else None,
-      "impact": tab.get("impact"),
-      "hgvs_c": tab.get("hgvsc"),
-      "protein": tab.get("hgvsp"),
-      "MANE": tab.get("mane_select"),
-      "canonical": tab.get("canonical"),
-      "exon": tab.get("exon"),
-      "biotype": tab.get("biotype"),
-      "variant_allele": tab.get("variant_allele"),
-  })
+for variant_entry in data:
+    input_variant = variant_entry.get("input")
+    table = variant_entry.get("transcript_consequences", []) or []
+
+    for tab in table:
+        rows.append({
+            "sample_id": SAMPLE_ID,
+            "gene": tab.get("gene_symbol"),
+            "input_variant": input_variant,
+            "transcript": tab.get("transcript_id"),
+            "consequence": ",".join(tab.get("consequence_terms", [])) if tab.get("consequence_terms") else None,
+            "impact": tab.get("impact"),
+            "hgvs_c": tab.get("hgvsc"),
+            "protein": tab.get("hgvsp"),
+            "MANE": tab.get("mane_select"),
+            "canonical": tab.get("canonical"),
+            "exon": tab.get("exon"),
+            "biotype": tab.get("biotype"),
+            "variant_allele": tab.get("variant_allele"),
+        })
+
+if not rows:
+    rows.append({
+        "sample_id": SAMPLE_ID,
+        "status": "NO TRANSCRIPT CONSEQUENCES RETURNED"
+    })
 
 final_table = pd.DataFrame(rows)
 
