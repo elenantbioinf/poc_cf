@@ -4,6 +4,8 @@ author: Elena Núñez Tomás
 output: html_document
 email_address: elena.nt.bioinf@gmail.com
 github_repo: https://github.com/elenantbioinf/poc_cf
+params:
+    final_report: NULL
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,11 +33,11 @@ pre {
 ```
 
 ```{r echo=FALSE}
-report_path <- "../final_report/NA12878rep1-4.final_report.txt"
+report_path <- params$final_report
 
-if (file.exists(report_path)) {
+if (!is.null(report_path) && file.exists(report_path)) {
   cat(readLines(report_path), sep = "\n")
 } else {
-  cat("Final report file not found.")
+  cat("Final report file not found: ", report_path)
 }
 ```

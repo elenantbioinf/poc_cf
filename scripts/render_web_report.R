@@ -6,17 +6,18 @@
 
 library(rmarkdown)
 
-rmd_file <- "reports/web_report.Rmd"
-out_dir  <- "final_report"
-out_file <- "web_report.html"
+args <- commandArgs(trailingOnly = TRUE)
+rmd_file <- args[1]
+out_html <- args[2]
+final_report <- args[3]
 
-if (!dir.exists(out_dir)) {
-  dir.create(out_dir, recursive = TRUE)
-}
+dir.create(dirname(out_html), recursive = TRUE, showWarnings = FALSE)
 
 rmarkdown::render(
   input = rmd_file,
-  output_file = out_file,
-  output_dir = out_dir,
+  output_file = basename(out_html),
+  output_dir = dirname(out_html),
+  params = list(final_report = normalizePath(final_report)),
+  knit_root_dir = getwd(),
   quiet = TRUE
 )

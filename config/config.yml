@@ -107,3 +107,9 @@ target_region:
   disease: "Cystic Fibrosis"
   out_dir: "final_report"
   gene: "CFTR"
+
+################################################################
+# Web_report
+12_web_report:
+  out_dir: "final_report"
+  rmd_template: "reports/web_report.Rmd"

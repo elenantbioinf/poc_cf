@@ -79,7 +79,7 @@ rule all:
         #Generate the final report:
         expand("final_report/{id}.final_report.txt", id=SAMPLES),
         #Generate the web report:
-        "final_report/web_report.html"
+        expand(config["12_web_report"]["out_dir"] + "/{id}.web_report.html", id = SAMPLES)
 
 #DAG execution
 
