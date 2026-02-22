@@ -21,8 +21,12 @@ VISUAL_DIR=$(grep "visual_dir:" "$CONFIG" | awk '{print $2}' | tr -d '"')
 # Final report directory
 FINAL_REPORT_DIR=$(grep "final_report_dir:" "$CONFIG" | awk '{print $2}' | tr -d '"')
 
+# Reports directory
+REPORTS_DIR=$(grep "reports_dir:" "$CONFIG" | awk '{print $2}' | tr -d '"')
+
 # Creation of all the directories
 mkdir -p "$RAW_DIR" "$CLEAN_DIR" "$REF_DIR" \
-         "$RESULTS_DIR" "$LOGS_DIR" "$VISUAL_DIR" "$FINAL_REPORT_DIR"
+         "$RESULTS_DIR" "$LOGS_DIR" "$VISUAL_DIR" \
+         "$FINAL_REPORT_DIR" "$REPORTS_DIR"
 
 echo "Directory structure initialized."

@@ -12,6 +12,7 @@ paths:
   logs_dir: "logs"
   visual_dir: "visual"
   final_report_dir: "final_report"
+  reports_dir: "reports"
 
 ##############################################################
 # Automatic generation of DAG
