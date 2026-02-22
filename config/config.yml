@@ -19,7 +19,7 @@ paths:
 00_workflow_dag:
   dag_dir: "visual"
   log_dir: "logs/00_workflow_dag"
-  final_target: "final_report/NA12878rep1-4.final_report.txt"
+  final_target: "final_report/NA12878rep1-4.web_report.html"
 
 ##############################################################
 # Quality control module

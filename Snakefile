@@ -95,7 +95,7 @@ onsuccess:
         cwd=cwd
     )
     subprocess.run(
-        ["bash", "scripts/dag_final_report.sh", 
+        ["bash", "scripts/dag_web_report.sh", 
         dag_config["dag_dir"], 
         dag_config["log_dir"],
         dag_config["final_target"]],

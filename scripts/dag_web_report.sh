@@ -5,10 +5,10 @@
 ######################################
 
 DAG_DIR="$1"
-DAG_DOT="${DAG_DIR}/dag_final_report.dot"
-DAG_PNG="${DAG_DIR}/dag_final_report.png"
+DAG_DOT="${DAG_DIR}/dag_web_report.dot"
+DAG_PNG="${DAG_DIR}/dag_web_report.png"
 LOG_DIR="$2"
-DAG_LOG="${LOG_DIR}/dag_final_report.log"
+DAG_LOG="${LOG_DIR}/dag_web_report.log"
 FINAL_TARGET="$3"
 
 mkdir -p "${DAG_DIR}"
