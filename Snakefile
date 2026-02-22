@@ -18,6 +18,7 @@ include: "rules/08_variant_calling.smk"
 include: "rules/09_variant_filtering.smk"
 include: "rules/10_annotation.smk"
 include: "rules/11_final_report.smk"
+include: "rules/12_web_report.smk"
 
 #Goal rule with the final files
 
@@ -76,7 +77,9 @@ rule all:
         #Annotation with vep rest:
         expand("results/annotation/{id}.vep.tsv", id=SAMPLES),
         #Generate the final report:
-        expand("final_report/{id}.final_report.txt", id=SAMPLES)
+        expand("final_report/{id}.final_report.txt", id=SAMPLES),
+        #Generate the web report:
+        "final_report/web_report.html"
 
 #DAG execution
 

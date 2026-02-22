@@ -1,0 +1,12 @@
+name: web_report
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base
+  - r-rmarkdown
+  - r-ggplot2
+  - r-dplyr
+  - r-knitr
+  - pandoc

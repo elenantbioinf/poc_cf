@@ -1,0 +1,41 @@
+---
+title: Analysis of CFTR variants
+author: Elena Núñez Tomás
+output: html_document
+email_address: elena.nt.bioinf@gmail.com
+github_repo: https://github.com/elenantbioinf/poc_cf
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
+```{css echo=FALSE}
+.author, .title {
+    display: none;
+}
+.main-container{
+    max-width: 100%;
+}
+body {
+    background-color: white;
+    color: black;
+    font-family: "Montserrat", sans-serif;
+}
+pre {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 6px;
+}
+```
+
+```{r echo=FALSE}
+report_path <- "../final_report/NA12878rep1-4.final_report.txt"
+
+if (file.exists(report_path)) {
+  cat(readLines(report_path), sep = "\n")
+} else {
+  cat("Final report file not found.")
+}
+```
