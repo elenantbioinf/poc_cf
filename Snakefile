@@ -78,6 +78,7 @@ rule all:
         expand("results/annotation/{id}.vep.tsv", id=SAMPLES),
         #Generate the final report:
         expand("final_report/{id}.final_report.txt", id=SAMPLES),
+        expand("final_report/{id}.final_report.json", id=SAMPLES),
         #Generate the web report:
         expand(config["12_web_report"]["out_dir"] + "/{id}.web_report.html", id = SAMPLES)
 

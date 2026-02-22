@@ -6,12 +6,15 @@
 
 import sys
 import os
+import json
+
 
 #================Variables necesarias=========================
 
 ANNOTATION_TSV = sys.argv[1]
 CHECK_TXT = sys.argv[2]
 OUT_TXT = sys.argv[3]
+OUT_JSON = os.path.splitext(OUT_TXT)[0] + ".json"
 OUTDIR = sys.argv[4]
 DISEASE = sys.argv[5]
 GENE = sys.argv[6]
@@ -34,11 +37,31 @@ report_text.append(f"Disease: {DISEASE}\n")
 report_text.append(f"Target gene: {GENE}\n")
 report_text.append(f"Reference genome: {REFERENCE}\n\n")
 
+#=================Creación de diccionario JSON==========
+
+report_json = {
+    "sample_id": SAMPLE_ID,
+    "disease": DISEASE,
+    "gene": GENE,
+    "reference_genome": REFERENCE,
+    "status": status,
+    "summary": {},
+    "variants": []
+}
+
 # =============Primer caso: no hay variantes anotadas
 
 if status == "NO VARIANTS DETECTED":
     report_text.append("NO VARIANTS DETECTED IN YOUR ANALYSIS\n")
     result = "".join(report_text)
+
+    report_json["summary"] = {
+        "total_unique_variants": 0,
+        "variants_with_mane": 0,
+        "variants_without_mane": 0,
+        "transcript_rows_with_mane": 0,
+        "transcript_rows_without_mane": 0
+    }
 
 # =============Segundo caso: si hay variantes anotadas
 
@@ -100,6 +123,15 @@ else:
     # Explicacion de cada variante
     report_text.append("SUMMARY (one block per variant)\n\n")
 
+    # ====== JSON summary ======
+    report_json["summary"] = {
+        "total_unique_variants": total_variants,
+        "variants_with_mane": variants_with_mane,
+        "variants_without_mane": total_variants - variants_with_mane,
+        "transcript_rows_with_mane": rows_mane,
+        "transcript_rows_without_mane": rows_no_mane
+    }
+
     for input_variant, info in variants.items():
 
         report_text.append(f"Variant: {input_variant}\n")
@@ -113,6 +145,21 @@ else:
         else:
             row = info["non_mane_rows"][0]
             report_text.append("  Best annotation: non-MANE\n")
+
+        best = "MANE" if len(info["mane_rows"]) > 0 else "non-MANE"
+
+        report_json["variants"].append({
+            "input_variant": input_variant,
+            "best_annotation": best,
+            "gene": row[header.index("gene")],
+            "transcript": row[header.index("transcript")],
+            "exon": row[header.index("exon")],
+            "consequence": row[header.index("consequence")],
+            "impact": row[header.index("impact")],
+            "hgvs_c": row[header.index("hgvs_c")],
+            "protein": row[header.index("protein")],
+            "transcript_annotations_rows": len(info["mane_rows"]) + len(info["non_mane_rows"])
+        })
 
         report_text.append(f"  Gene: {row[header.index('gene')]}\n")
         report_text.append(f"  Transcript: {row[header.index('transcript')]}\n")
@@ -137,4 +184,7 @@ os.makedirs(OUTDIR, exist_ok=True)
 with open(OUT_TXT, "w") as out:
     out.write(result + "\n")
 
+# ============== Generación del JSON estructurado
+with open(OUT_JSON, "w") as outj:
+    json.dump(report_json, outj, indent=2, ensure_ascii=False)
 

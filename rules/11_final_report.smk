@@ -8,7 +8,8 @@ rule r11_01_final_report:
         annotation = "results/annotation/{id}.vep.tsv",
         check = "results/annotation/{id}.variants_check.txt"
     output:
-        report = "final_report/{id}.final_report.txt"
+        report_txt = "final_report/{id}.final_report.txt",
+        json = "final_report/{id}.final_report.json"
     log:
         "logs/11_final_report/{id}.final_report.log"
     conda:
@@ -24,7 +25,7 @@ rule r11_01_final_report:
         python {input.script} \
             {input.annotation} \
             {input.check} \
-            {output.report} \
+            {output.report_txt} \
             "{params.out_dir}" \
             "{params.disease}" \
             "{params.gene}" \
