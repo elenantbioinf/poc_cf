@@ -5,7 +5,7 @@ output: html_document
 email_address: elena.nt.bioinf@gmail.com
 github_repo: https://github.com/elenantbioinf/poc_cf
 params:
-    final_report: NULL
+    final_report_json: NULL
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,11 +33,52 @@ pre {
 ```
 
 ```{r echo=FALSE}
-report_path <- params$final_report
+library(jsonlite)
 
-if (!is.null(report_path) && file.exists(report_path)) {
-  cat(readLines(report_path), sep = "\n")
+data <- fromJSON(params$final_report_json)
+
+sample_id <- data$sample_id
+disease   <- data$disease
+gene      <- data$gene
+reference    <- data$reference_genome
+
+total_variants <- data$summary$total_unique_variants
+variants <- data$variants
+no_variants <- (total_variants == 0)
+```
+
+# CFTR Variant Report
+## Sample information
+
+Sample ID: `r sample_id`
+
+Disease: `r disease`
+
+Gene: `r gene`
+
+Reference genome: `r reference`
+
+## Variants detected
+
+Total unique variants: `r total_variants`
+
+```{r echo=FALSE, results="asis"}
+if (no_variants) {
+  cat("No variants detected in your analysis.\n")
 } else {
-  cat("Final report file not found: ", report_path)
+  for (i in seq_len(nrow(variants))) {
+    v <- variants[i, ]
+
+    cat(sprintf("\n### Variant: %s\n\n", v$input_variant))
+    cat(sprintf("- Best annotation: %s\n", v$best_annotation))
+    cat(sprintf("- Gene: %s\n", v$gene))
+    cat(sprintf("- Transcript: %s\n", v$transcript))
+    cat(sprintf("- Exon: %s\n", v$exon))
+    cat(sprintf("- Consequence: %s\n", v$consequence))
+    cat(sprintf("- Impact: %s\n", v$impact))
+    cat(sprintf("- HGVS_C: %s\n", v$hgvs_c))
+    cat(sprintf("- Protein: %s\n", v$protein))
+    cat(sprintf("- Transcript annotations (rows): %s\n\n", v$transcript_annotations_rows))
+  }
 }
 ```
