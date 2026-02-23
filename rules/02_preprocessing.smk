@@ -28,7 +28,7 @@ rule r02_01_trimming_fastp:
             {output.r1} {output.r2} \
             {output.html} {output.json} \
             {params.minlen} \
-            "{params.extra}"
+            "{params.extra}" \
             > {log} 2>&1
         """
 
@@ -55,19 +55,19 @@ rule r02_02_clean_fastqc:
         """
 
 rule r02_03_clean_multiqc:
-    input:  #Depend on .done directory
-        done = expand("results/quality_control/clean_fastqc/.done/{id}.fastqc.done", id=SAMPLES),
+    input: 
+        done = "results/quality_control/clean_fastqc/.done/{id}.fastqc.done",
         script = "scripts/multiqc.sh"
     output:
-        "results/quality_control/clean_multiqc/multiqc_report.html"
+        html = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html"
     log:
-        "logs/02_preprocessing/clean_multiqc.log"
+        "logs/02_preprocessing/{id}.clean_multiqc.log"
     conda:
         "../envs/01_quality_control.yml"
     params:
         fastqc_dir = config["02_preprocessing"]["clean_fastqc_dir"],
-        outdir = config["02_preprocessing"]["clean_multiqc_dir"]
+        outdir = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}"
     shell:
         """
-         {input.script} {params.fastqc_dir} {params.outdir} > {log} 2>&1
+        {input.script} {params.fastqc_dir} {params.outdir} > {log} 2>&1
         """

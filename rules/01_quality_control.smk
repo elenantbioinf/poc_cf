@@ -25,17 +25,17 @@ rule r01_01_raw_fastqc:
 
 rule r01_02_raw_multiqc:
     input:
-        done = expand("results/quality_control/raw_fastqc/.done/{id}.fastqc.done", id=SAMPLES),
+        done = "results/quality_control/raw_fastqc/.done/{id}.fastqc.done",
         script = "scripts/multiqc.sh"
     output:
-        config["01_quality_control"]["raw_multiqc_dir"] + "/multiqc_report.html"
+        html = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report.html"
     conda:
         "../envs/01_quality_control.yml"
     log:
-        "logs/01_quality_control/raw_multiqc.log"
+        "logs/01_quality_control/{id}.raw_multiqc.log"
     params:
         fastqc_dir = config["01_quality_control"]["raw_fastqc_dir"],
-        outdir = config["01_quality_control"]["raw_multiqc_dir"]
+        outdir = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}"
     shell:
         """
         {input.script} {params.fastqc_dir} {params.outdir} > {log} 2>&1

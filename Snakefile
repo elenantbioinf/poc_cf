@@ -25,15 +25,14 @@ include: "rules/12_web_report.smk"
 rule all:
     input:
         #Quality_control in raw reads
-        "results/quality_control/raw_multiqc/multiqc_report.html",
-        #Preprocessing: trimming_fastp
+        expand("results/quality_control/raw_multiqc/{id}/multiqc_report.html", id=SAMPLES),        #Preprocessing: trimming_fastp
         expand("data/clean/{id}_R1.trimmed.fastq.gz", id = SAMPLES),
         expand("data/clean/{id}_R2.trimmed.fastq.gz", id = SAMPLES),
         #Preprocessing: fastp reports
         expand("results/preprocessing/{id}.fastp.html", id = SAMPLES),
         expand("results/preprocessing/{id}.fastp.json", id = SAMPLES),
         #Preprocessing: Quality control after trimming
-        "results/quality_control/clean_multiqc/multiqc_report.html",
+        expand("results/quality_control/clean_multiqc/{id}/multiqc_report.html", id=SAMPLES),
         #Reference genome
         config["03_reference"]["fasta"],
         config["03_reference"]["fasta"] + ".fai",
