@@ -4,7 +4,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python=3.11
-  - snakemake
-  - pandas
+  - python=3.12
+  - snakemake=7.32.4
+  - pandas=2.2.2
   - graphviz=14.1.1
