@@ -148,25 +148,33 @@ else:
 
         best = "MANE" if len(info["mane_rows"]) > 0 else "non-MANE"
 
+        hgvs_c_value = row[header.index("hgvs_c")]
+        transcript_value = row[header.index("transcript")]
+
+        if hgvs_c_value and ":" in hgvs_c_value:
+            transcript_with_version = hgvs_c_value.split(":")[0]
+        else:
+            transcript_with_version = transcript_value
+
         report_json["variants"].append({
             "input_variant": input_variant,
             "best_annotation": best,
             "gene": row[header.index("gene")],
-            "transcript": row[header.index("transcript")],
+            "transcript": transcript_with_version,
             "exon": row[header.index("exon")],
             "consequence": row[header.index("consequence")],
             "impact": row[header.index("impact")],
-            "hgvs_c": row[header.index("hgvs_c")],
+            "hgvs_c": hgvs_c_value,
             "protein": row[header.index("protein")],
             "transcript_annotations_rows": len(info["mane_rows"]) + len(info["non_mane_rows"])
         })
 
         report_text.append(f"  Gene: {row[header.index('gene')]}\n")
-        report_text.append(f"  Transcript: {row[header.index('transcript')]}\n")
+        report_text.append(f"  Transcript: {transcript_with_version}\n")
         report_text.append(f"  Exon: {row[header.index('exon')]}\n")
         report_text.append(f"  Consequence: {row[header.index('consequence')]}\n")
         report_text.append(f"  Impact: {row[header.index('impact')]}\n")
-        report_text.append(f"  HGVS_C: {row[header.index('hgvs_c')]}\n")
+        report_text.append(f"  HGVS_C: {hgvs_c_value}\n")
         report_text.append(f"  Protein: {row[header.index('protein')]}\n")
 
         report_text.append(
