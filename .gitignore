@@ -14,14 +14,6 @@ data/raw/*
 data/clean/*
 !data/clean/README.md
 
-!data/reference/
-data/reference/*
-!data/reference/README.md
-
-!data/database_cftr/
-
-!data/test/
-
 !results/README.md
 
 !final_report/README.md
@@ -32,6 +24,19 @@ logs/*/*
 !logs/*/README.md
 
 !visual/README.md
+
+#Resources directory
+resources/*
+!resources/README.md
+
+#Keep CFTR target-region resources versioned
+!resources/database_cftr/
+!resources/database_cftr/*
+
+#Ignore reference genome files
+!resources/reference/
+resources/reference/*
+!resources/reference/README.md
 
 #ignore snakemake cache
 .snakemake

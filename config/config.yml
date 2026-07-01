@@ -50,7 +50,7 @@ trimming:
 # Reference genome
 03_reference:
   #local path where the reference genome in fasta will be stored
-  fasta: "data/reference/hg38.fa"
+  fasta: "resources/reference/hg38.fa"
   #url to download the reference genome
   url: "ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
   #genome
@@ -59,7 +59,7 @@ trimming:
 ################################################################
 # Target region (CFTR)
 target_region:
-  bed: "test/database_cftr/cftr_mane_select_exons.bed"
+  bed: "resources/database_cftr/cftr_mane_select_exons.bed"
 
 ################################################################
 # Quality alignment
