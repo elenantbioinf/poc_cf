@@ -1,3 +1,6 @@
+# Ignore .bundle for development purposes
+.bundle/
+
 # Ignore the data and results directories
 data/*
 results/*
