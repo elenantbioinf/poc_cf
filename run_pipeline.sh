@@ -70,10 +70,14 @@ if [[ ! -f "$SNAKEFILE" ]]; then
     exit 1
 fi
 
-#Check Snakemake availability
-if ! command -v snakemake >/dev/null 2>&1; then
-    echo "Error: snakemake is not available in the current environment."  >&2
-    echo "Please, activate pipeline environment with: conda activate poc_cf" >&2
+#Check Snakemake and conda availability
+if command -v snakemake >/dev/null 2>&1; then
+    CMD_PREFIX=()
+elif command -v conda >/dev/null 2>&1; then
+    CMD_PREFIX=(conda run -n poc_cf)
+else
+    echo "Error: snakemake is not available and conda was not found." >&2
+    echo "Please, activate the pipeline environment with: conda activate poc_cf" >&2
     exit 1
 fi
 
@@ -86,6 +90,7 @@ mkdir -p "$LOG_DIR"
 
 #Run the Snakemake command
 CMD=(
+    "${CMD_PREFIX[@]}"
     snakemake
         --snakefile "$SNAKEFILE"
         --configfile "$CONFIG_FILE"
