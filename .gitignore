@@ -19,9 +19,6 @@ data/clean/*
 !final_report/README.md
 
 !logs/README.md
-!logs/*/
-logs/*/*
-!logs/*/README.md
 
 !visual/README.md
 
