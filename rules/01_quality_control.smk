@@ -9,7 +9,7 @@ rule r01_01_raw_fastqc:
         r2 = get_read2,
         script = "scripts/run_fastqc.sh"
     output:
-        done = "results/quality_control/raw_fastqc/.done/{id}.fastqc.done"
+        done = config["01_quality_control"]["raw_fastqc_dir"] + "/.done/{id}.fastqc.done"
     log:
         "logs/01_quality_control/{id}.raw_fastqc.log"
     conda:
@@ -25,7 +25,7 @@ rule r01_01_raw_fastqc:
 
 rule r01_02_raw_multiqc:
     input:
-        done = "results/quality_control/raw_fastqc/.done/{id}.fastqc.done",
+        done = config["01_quality_control"]["raw_fastqc_dir"] + "/.done/{id}.fastqc.done",
         script = "scripts/multiqc.sh"
     output:
         html = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report.html"

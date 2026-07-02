@@ -24,14 +24,15 @@ paths:
 ##############################################################
 # Quality control module
 01_quality_control:
-  raw_fastqc_dir: "results/quality_control/raw_fastqc"
-  raw_multiqc_dir: "results/quality_control/raw_multiqc"
+  raw_fastqc_dir: "results/01_quality_control/raw_fastqc"
+  raw_multiqc_dir: "results/01_quality_control/raw_multiqc"
 
 ##############################################################
 # Preprocessing module
 02_preprocessing:
-  clean_fastqc_dir: "results/quality_control/clean_fastqc"
-  clean_multiqc_dir: "results/quality_control/clean_multiqc"
+  fastp_dir: "results/02_preprocessing/fastp"
+  clean_fastqc_dir: "results/02_preprocessing/clean_fastqc"
+  clean_multiqc_dir: "results/02_preprocessing/clean_multiqc"
 
 trimming:
   min_length: 30
@@ -62,14 +63,22 @@ target_region:
   bed: "resources/database_cftr/cftr_mane_select_exons.bed"
 
 ################################################################
+# Mapping
+04_mapping:
+  out_dir: "results/04_mapping"
+
+################################################################
 # Quality alignment
 05_quality_alignment:
+  flagstat_dir: "results/05_quality_alignment/flagstat"
+  qualimap_dir: "results/05_quality_alignment/qualimap"
   qualimap_java_mem: "10G"
   qualimap_genome: "HUMAN"
 
 ################################################################
 # Mark duplicates
 06_mark_duplicates:
+  out_dir: "results/06_mark_duplicates"
   read_groups:
     rglb: "lib1"
     rgpl: "ILLUMINA"
@@ -81,23 +90,27 @@ target_region:
 ################################################################
 # Coverage
 07_coverage:
+  out_dir: "results/07_coverage"
   thresholds: "10,20,30,40"
   extra_args: "--no-per-base --flag 1024"
 
 ################################################################
 # Variant calling
 08_variant_calling:
+  out_dir: "results/08_variant_calling"
   extra_args: "-C 5 --ploidy 2 --min-mapping-quality 20"
 
 ################################################################
 # Variant filtering
 09_variant_filtering:
+  out_dir: "results/09_variant_filtering"
   min_coverage: "5"
   min_quality: "20"
 
 ################################################################
 # Annotation
 10_annotation:
+  out_dir: "results/10_annotation"
   header: "CHROM\tPOS\tID\tREF\tALT"
   query_format: "%CHROM\t%POS\t%ID\t%REF\t%ALT\n"
 

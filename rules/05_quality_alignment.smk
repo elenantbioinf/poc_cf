@@ -6,11 +6,11 @@
 
 rule r05_01_alignment_flagstat:
     input:
-        bam_sorted = "results/mapping/{id}.sorted.bam",
-        bai = "results/mapping/{id}.sorted.bam.bai",
+        bam_sorted = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam",
+        bai = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam.bai",
         script = "scripts/run_flagstat.sh"
     output:
-        flagstat = "results/quality_alignment/{id}.flagstat.txt"
+        flagstat = config["05_quality_alignment"]["flagstat_dir"] + "/{id}.flagstat.txt"
     log:
         "logs/05_quality_alignment/{id}.flagstat.log"
     conda:
@@ -25,11 +25,11 @@ rule r05_01_alignment_flagstat:
 
 rule r05_02_qualimap:
     input:
-        bam_sorted ="results/mapping/{id}.sorted.bam",
-        bai = "results/mapping/{id}.sorted.bam.bai",
+        bam_sorted = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam",
+        bai = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam.bai",
         script = "scripts/run_qualimap.sh"
     output:
-        qualimap_directory = directory("results/quality_alignment/qualimap/{id}")
+        qualimap_directory = directory(config["05_quality_alignment"]["qualimap_dir"] + "/{id}")
     log:
         "logs/05_quality_alignment/{id}.qualimap.log"
     conda:

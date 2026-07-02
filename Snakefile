@@ -25,14 +25,19 @@ include: "rules/12_web_report.smk"
 rule all:
     input:
         #Quality_control in raw reads
-        expand("results/quality_control/raw_multiqc/{id}/multiqc_report.html", id=SAMPLES),        #Preprocessing: trimming_fastp
+        expand(config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report.html", id=SAMPLES),
+        
+        #Preprocessing: trimming_fastp
         expand("data/clean/{id}_R1.trimmed.fastq.gz", id = SAMPLES),
         expand("data/clean/{id}_R2.trimmed.fastq.gz", id = SAMPLES),
+
         #Preprocessing: fastp reports
-        expand("results/preprocessing/{id}.fastp.html", id = SAMPLES),
-        expand("results/preprocessing/{id}.fastp.json", id = SAMPLES),
+        expand(config["02_preprocessing"]["fastp_dir"] + "/{id}.fastp.html", id = SAMPLES),
+        expand(config["02_preprocessing"]["fastp_dir"] + "/{id}.fastp.json", id = SAMPLES),
+       
         #Preprocessing: Quality control after trimming
-        expand("results/quality_control/clean_multiqc/{id}/multiqc_report.html", id=SAMPLES),
+        expand(config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html", id=SAMPLES),
+        
         #Reference genome
         config["03_reference"]["fasta"],
         config["03_reference"]["fasta"] + ".fai",
@@ -40,44 +45,57 @@ rule all:
             config["03_reference"]["fasta"] + ".{ext}",
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         ),
+
         #Mapping
-        expand("results/mapping/{id}.sam", id = SAMPLES),
+        expand(config["04_mapping"]["out_dir"] + "/{id}.sam", id = SAMPLES),
         #SAM_to_BAM
-        expand("results/mapping/{id}.unsorted.bam", id=SAMPLES),
+        expand(config["04_mapping"]["out_dir"] + "/{id}.unsorted.bam", id=SAMPLES),
         #BAM_sorted:
-        expand("results/mapping/{id}.sorted.bam", id=SAMPLES),
+        expand(config["04_mapping"]["out_dir"] + "/{id}.sorted.bam", id=SAMPLES),
         #BAM_index:
-        expand("results/mapping/{id}.sorted.bam.bai", id=SAMPLES),
+        expand(config["04_mapping"]["out_dir"] + "/{id}.sorted.bam.bai", id=SAMPLES),
+        
         #Quality control in alignment:
-        expand("results/quality_alignment/{id}.flagstat.txt", id=SAMPLES),
-        expand("results/quality_alignment/qualimap/{id}", id=SAMPLES),
+        expand(config["05_quality_alignment"]["flagstat_dir"] + "/{id}.flagstat.txt", id=SAMPLES),
+        expand(config["05_quality_alignment"]["qualimap_dir"] + "/{id}", id=SAMPLES),
+
         ## Add read groups
-        expand("results/mark_duplicates/{id}.sorted.rg.bam", id=SAMPLES),
-        expand("results/mark_duplicates/{id}.sorted.rg.bam.bai", id=SAMPLES),
+        expand(config["06_mark_duplicates"]["out_dir"] + "/{id}.sorted.rg.bam", id=SAMPLES),
+        expand(config["06_mark_duplicates"]["out_dir"] + "/{id}.sorted.rg.bam.bai", id=SAMPLES),
+
         #Mark duplicates
-        expand("results/mark_duplicates/{id}.dedup.bam", id=SAMPLES),
-        expand("results/mark_duplicates/{id}.dedup.bam.bai", id=SAMPLES),
-        expand("results/mark_duplicates/{id}_mark_duplicates_metrics.txt", id=SAMPLES),
+        expand(config["06_mark_duplicates"]["out_dir"] + "/{id}.dedup.bam", id=SAMPLES),
+        expand(config["06_mark_duplicates"]["out_dir"] + "/{id}.dedup.bam.bai", id=SAMPLES),
+        expand(config["06_mark_duplicates"]["out_dir"] + "/{id}_mark_duplicates_metrics.txt", id=SAMPLES),
+        
         #Coverage_CFTR:
-        expand("results/coverage/{id}.regions.bed.gz", id=SAMPLES),
+        expand(config["07_coverage"]["out_dir"] + "/{id}.regions.bed.gz", id=SAMPLES),
+
         #Variant_calling and index:
-        expand("results/variant_calling/{id}.ori.vcf.gz", id=SAMPLES),
-        expand("results/variant_calling/{id}.ori.vcf.gz.tbi", id=SAMPLES),
+        expand(config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz", id=SAMPLES),
+        expand(config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz.tbi", id=SAMPLES),
+
         #Variant marking and index:
-        expand("results/variant_filtering/{id}.marked.vcf.gz", id=SAMPLES),
-        expand("results/variant_filtering/{id}.marked.vcf.gz.tbi", id=SAMPLES),
+        expand(config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz", id=SAMPLES),
+        expand(config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz.tbi", id=SAMPLES),
+
         #Variant filtering and index:
-        expand("results/variant_filtering/{id}.filtered.vcf.gz", id=SAMPLES),
-        expand("results/variant_filtering/{id}.filtered.vcf.gz.tbi", id=SAMPLES),
+        expand(config["09_variant_filtering"]["out_dir"] + "/{id}.filtered.vcf.gz", id=SAMPLES),
+        expand(config["09_variant_filtering"]["out_dir"] + "/{id}.filtered.vcf.gz.tbi", id=SAMPLES),
+
         #Extract the variants from filtered.vcf:
-        expand("results/annotation/{id}.variants.tsv", id=SAMPLES),
+        expand(config["10_annotation"]["out_dir"] + "/{id}.variants.tsv", id=SAMPLES),
+
         #Check the variants tsv:
-        expand("results/annotation/{id}.variants_check.txt", id=SAMPLES),
+        expand(config["10_annotation"]["out_dir"] + "/{id}.variants_check.txt", id=SAMPLES),
+        
         #Annotation with vep rest:
-        expand("results/annotation/{id}.vep.tsv", id=SAMPLES),
+        expand(config["10_annotation"]["out_dir"] + "/{id}.vep.tsv", id=SAMPLES),
+
         #Generate the final report:
-        expand("final_report/{id}.final_report.txt", id=SAMPLES),
-        expand("final_report/{id}.final_report.json", id=SAMPLES),
+        expand(config["11_final_report"]["out_dir"] + "/{id}.final_report.txt", id=SAMPLES),
+        expand(config["11_final_report"]["out_dir"] + "/{id}.final_report.json", id=SAMPLES),
+
         #Generate the web report:
         expand(config["12_web_report"]["out_dir"] + "/{id}.web_report.html", id = SAMPLES)
 

@@ -7,12 +7,12 @@
 
 rule r07_01_coverage:
     input:
-        bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
-        bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
+        bam_dedup = config["06_mark_duplicates"]["out_dir"] + "/{id}.dedup.bam",
+        bai_dedup = config["06_mark_duplicates"]["out_dir"] + "/{id}.dedup.bam.bai",
         bed = config["target_region"]["bed"],
         script = "scripts/coverage_mosdepth.sh"
     output:
-        regions = "results/coverage/{id}.regions.bed.gz"
+        regions = config["07_coverage"]["out_dir"] + "/{id}.regions.bed.gz"
     log:
         "logs/07_coverage/{id}.mosdepth.log"
     conda:
@@ -20,7 +20,7 @@ rule r07_01_coverage:
     params:
         thresholds = config["07_coverage"]["thresholds"],
         extra_args = config["07_coverage"]["extra_args"],
-        prefix = "results/coverage/{id}"
+        prefix = config["07_coverage"]["out_dir"] + "/{id}"
     shell:
         """
         {input.script} \

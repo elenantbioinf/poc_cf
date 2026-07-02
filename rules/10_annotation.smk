@@ -6,10 +6,10 @@
 
 rule r10_01_extract_variants:
     input:
-        vcf_filtered = "results/variant_filtering/{id}.filtered.vcf.gz",
+        vcf_filtered = config["09_variant_filtering"]["out_dir"] + "/{id}.filtered.vcf.gz",
         script = "scripts/extract_variants_from_vcf.sh"
     output:
-        tsv = "results/annotation/{id}.variants.tsv"
+        tsv = config["10_annotation"]["out_dir"] + "/{id}.variants.tsv"
     log:
         "logs/10_annotation/{id}.extract_variants.log"
     conda:
@@ -31,10 +31,10 @@ rule r10_01_extract_variants:
 
 rule r10_02_check_variants:
     input:
-        variant_tsv = "results/annotation/{id}.variants.tsv",
+        variant_tsv = config["10_annotation"]["out_dir"] + "/{id}.variants.tsv",
         script = "scripts/check_variants_tsv.sh"
     output:
-        check = "results/annotation/{id}.variants_check.txt"
+        check = config["10_annotation"]["out_dir"] + "/{id}.variants_check.txt"
     log: 
         "logs/10_annotation/{id}.check_variants.log"
     conda:
@@ -48,13 +48,13 @@ rule r10_02_check_variants:
 
 rule r10_03_rest_vep_annotation:
     input:
-        tsv = "results/annotation/{id}.variants.tsv",
-        check = "results/annotation/{id}.variants_check.txt",
+        tsv = config["10_annotation"]["out_dir"] + "/{id}.variants.tsv",
+        check = config["10_annotation"]["out_dir"] + "/{id}.variants_check.txt",
         script = "scripts/vep_rest_annotation.py"
     log:
         "logs/10_annotation/{id}.vep_rest_annotation.log"
     output:
-        annotation = "results/annotation/{id}.vep.tsv"
+        annotation = config["10_annotation"]["out_dir"] + "/{id}.vep.tsv"
     conda:
         "../envs/10_annotation.yml"
     shell:

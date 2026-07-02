@@ -12,8 +12,8 @@ rule r02_01_trimming_fastp:
     output:
         r1 = "data/clean/{id}_R1.trimmed.fastq.gz",
         r2 = "data/clean/{id}_R2.trimmed.fastq.gz",
-        html = "results/preprocessing/{id}.fastp.html",
-        json = "results/preprocessing/{id}.fastp.json"
+        html = config["02_preprocessing"]["fastp_dir"] + "/{id}.fastp.html",
+        json = config["02_preprocessing"]["fastp_dir"] + "/{id}.fastp.json"
     log:
         "logs/02_preprocessing/{id}.fastp.log"
     conda:
@@ -40,7 +40,7 @@ rule r02_02_clean_fastqc:
         r2 = "data/clean/{id}_R2.trimmed.fastq.gz",
         script = "scripts/run_fastqc.sh"
     output:
-        done = "results/quality_control/clean_fastqc/.done/{id}.fastqc.done"
+        done = config["02_preprocessing"]["clean_fastqc_dir"] + "/.done/{id}.fastqc.done"
     log:
         "logs/02_preprocessing/{id}.clean_fastqc.log"
     conda:
@@ -56,7 +56,7 @@ rule r02_02_clean_fastqc:
 
 rule r02_03_clean_multiqc:
     input: 
-        done = "results/quality_control/clean_fastqc/.done/{id}.fastqc.done",
+        done = config["02_preprocessing"]["clean_fastqc_dir"] + "/.done/{id}.fastqc.done",
         script = "scripts/multiqc.sh"
     output:
         html = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html"

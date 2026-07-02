@@ -16,7 +16,7 @@ rule r04_01_bwa_mapping:
             ext = ["amb", "ann", "bwt", "pac", "sa"]
         )
     output:
-        sam = "results/mapping/{id}.sam"
+        sam = config["04_mapping"]["out_dir"] + "/{id}.sam"
     log:
         "logs/04_mapping/{id}.bwa_mapping.log"
     conda:
@@ -31,10 +31,10 @@ rule r04_01_bwa_mapping:
 
 rule r04_02_sam_to_bam:
     input:
-        sam = "results/mapping/{id}.sam",
+        sam = config["04_mapping"]["out_dir"] + "/{id}.sam",
         script = "scripts/sam_to_bam.sh"
     output:
-        bam_unsorted = "results/mapping/{id}.unsorted.bam"
+        bam_unsorted = config["04_mapping"]["out_dir"] + "/{id}.unsorted.bam"
     log:
         "logs/04_mapping/{id}.sam_to_bam.log"
     conda:
@@ -49,10 +49,10 @@ rule r04_02_sam_to_bam:
 
 rule r04_03_bam_sort:
     input:
-        bam_unsorted = "results/mapping/{id}.unsorted.bam",
+        bam_unsorted = config["04_mapping"]["out_dir"] + "/{id}.unsorted.bam",
         script = "scripts/bam_sort.sh"
     output:
-        bam_sorted = "results/mapping/{id}.sorted.bam"
+        bam_sorted = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam"
     log:
         "logs/04_mapping/{id}.bam_sort.log"
     conda: 
@@ -67,15 +67,16 @@ rule r04_03_bam_sort:
 
 rule r04_04_bam_index:
     input:
-        bam_sorted = "results/mapping/{id}.sorted.bam",
+        bam_sorted = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam",
         script = "scripts/bam_index.sh"
     output:
-        bam_index = "results/mapping/{id}.sorted.bam.bai"
+        bam_index = config["04_mapping"]["out_dir"] + "/{id}.sorted.bam.bai"
     log:
         "logs/04_mapping/{id}.bam_index.log"
     conda: 
         "../envs/04_mapping.yml"
+    threads: 2
     shell:
         """
-        {input.script} {input.bam_sorted} > {log} 2>&1
+        {input.script} {input.bam_sorted} {threads} > {log} 2>&1
         """

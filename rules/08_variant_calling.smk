@@ -6,14 +6,14 @@
 
 rule r08_01_variant_calling:
     input:
-        bam_dedup = "results/mark_duplicates/{id}.dedup.bam",
-        bai_dedup = "results/mark_duplicates/{id}.dedup.bam.bai",
+        bam_dedup = config["06_mark_duplicates"]["out_dir"] + "/{id}.dedup.bam",
+        bai_dedup = config["06_mark_duplicates"]["out_dir"] + "/{id}.dedup.bam.bai",
         bed = config["target_region"]["bed"],
         ref = config["03_reference"]["fasta"],
         ref_fai = config["03_reference"]["fasta"] + ".fai",
         script = "scripts/run_freebayes.sh"
     output:
-        vcf = "results/variant_calling/{id}.ori.vcf.gz"
+        vcf = config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz"
     log:
         "logs/08_variant_calling/{id}.freebayes.log"
     conda:
@@ -35,10 +35,10 @@ rule r08_01_variant_calling:
 
 rule r08_02_vcf_index:
     input:
-        vcf = "results/variant_calling/{id}.ori.vcf.gz",
+        vcf = config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz",
         script = "scripts/vcf_index.sh"
     output:
-        tbi = "results/variant_calling/{id}.ori.vcf.gz.tbi"
+        tbi = config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz.tbi"
     log:
         "logs/08_variant_calling/{id}.vcf_index.log"
     conda:

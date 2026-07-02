@@ -5,11 +5,11 @@
 rule r11_01_final_report:
     input:
         script = "scripts/final_report.py",
-        annotation = "results/annotation/{id}.vep.tsv",
-        check = "results/annotation/{id}.variants_check.txt"
+        annotation = config["10_annotation"]["out_dir"] + "/{id}.vep.tsv",
+        check = config["10_annotation"]["out_dir"] + "/{id}.variants_check.txt"
     output:
-        report_txt = "final_report/{id}.final_report.txt",
-        json = "final_report/{id}.final_report.json"
+        report_txt = config["11_final_report"]["out_dir"] + "/{id}.final_report.txt",
+        json = config["11_final_report"]["out_dir"] + "/{id}.final_report.json"
     log:
         "logs/11_final_report/{id}.final_report.log"
     conda:

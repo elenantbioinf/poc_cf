@@ -6,11 +6,11 @@
 
 rule r09_01_mark_variants_bcftools:
     input:
-        vcf = "results/variant_calling/{id}.ori.vcf.gz",
-        tbi = "results/variant_calling/{id}.ori.vcf.gz.tbi",
+        vcf = config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz",
+        tbi = config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz.tbi",
         script = "scripts/mark_variants_bcftools.sh"
     output:
-        vcf_marked = "results/variant_filtering/{id}.marked.vcf.gz"
+        vcf_marked = config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz"
     log:
         "logs/09_variant_filtering/{id}.bcftools_mark.log"
     params:
@@ -34,10 +34,10 @@ rule r09_01_mark_variants_bcftools:
 
 rule r09_02_vcf_marked_index:
     input:
-        vcf_marked = "results/variant_filtering/{id}.marked.vcf.gz",
+        vcf_marked = config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz",
         script = "scripts/vcf_index.sh"
     output:
-        tbi = "results/variant_filtering/{id}.marked.vcf.gz.tbi"
+        tbi_marked = config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz.tbi"
     log:
         "logs/09_variant_filtering/{id}.marked_vcf_index.log"
     conda:
@@ -51,10 +51,11 @@ rule r09_02_vcf_marked_index:
 
 rule r09_03_filter_pass:
     input:
-        vcf_marked = "results/variant_filtering/{id}.marked.vcf.gz",
+        vcf_marked = config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz",
+        tbi_marked = config["09_variant_filtering"]["out_dir"] + "/{id}.marked.vcf.gz.tbi",
         script = "scripts/filter_pass_variants.sh"
     output:
-        vcf_filtered = "results/variant_filtering/{id}.filtered.vcf.gz"
+        vcf_filtered = config["09_variant_filtering"]["out_dir"] + "/{id}.filtered.vcf.gz"
     log:
         "logs/09_variant_filtering/{id}.filter_pass.log"
     conda:
@@ -69,10 +70,10 @@ rule r09_03_filter_pass:
 
 rule r09_04_filtered_vcf_index:
     input:
-        vcf = "results/variant_filtering/{id}.filtered.vcf.gz",
+        vcf = config["09_variant_filtering"]["out_dir"] + "/{id}.filtered.vcf.gz",
         script = "scripts/vcf_index.sh"
     output:
-        tbi = "results/variant_filtering/{id}.filtered.vcf.gz.tbi"
+        tbi = config["09_variant_filtering"]["out_dir"] + "/{id}.filtered.vcf.gz.tbi"
     log:
         "logs/09_variant_filtering/{id}.filtered_vcf_index.log"
     conda:
