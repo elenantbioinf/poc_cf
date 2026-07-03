@@ -70,7 +70,9 @@ rule all:
         
         #Coverage_CFTR:
         expand(config["07_coverage"]["out_dir"] + "/{id}.regions.bed.gz", id=SAMPLES),
-
+        expand(config["07_coverage"]["out_dir"] + "/{id}.thresholds.bed.gz", id=SAMPLES),
+        expand(config["07_coverage"]["out_dir"] + "/{id}.per-base.bed.gz", id=SAMPLES),
+        
         #Variant_calling and index:
         expand(config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz", id=SAMPLES),
         expand(config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz.tbi", id=SAMPLES),

@@ -1,5 +1,5 @@
 ##################################
-# This rules is for calculate the coverage in interesting region
+# These rules are for calculating the coverage in interesting regions
 ###################################
 
 
@@ -12,14 +12,16 @@ rule r07_01_coverage:
         bed = config["target_region"]["bed"],
         script = "scripts/coverage_mosdepth.sh"
     output:
-        regions = config["07_coverage"]["out_dir"] + "/{id}.regions.bed.gz"
+        regions = config["07_coverage"]["out_dir"] + "/{id}.regions.bed.gz",
+        thresholds = config["07_coverage"]["out_dir"] + "/{id}.thresholds.bed.gz",
+        per_base = config["07_coverage"]["out_dir"] + "/{id}.per-base.bed.gz"
     log:
         "logs/07_coverage/{id}.mosdepth.log"
     conda:
         "../envs/07_coverage.yml"
     params:
         thresholds = config["07_coverage"]["thresholds"],
-        extra_args = config["07_coverage"]["extra_args"],
+        flag = config["07_coverage"]["flag"],
         prefix = config["07_coverage"]["out_dir"] + "/{id}"
     shell:
         """
@@ -28,6 +30,6 @@ rule r07_01_coverage:
             {input.bed} \
             {params.prefix} \
             {params.thresholds} \
-            {params.extra_args} \
+            {params.flag} \
             > {log} 2>&1
         """

@@ -92,7 +92,8 @@ target_region:
 07_coverage:
   out_dir: "results/07_coverage"
   thresholds: "10,20,30,40"
-  extra_args: "--no-per-base --flag 1024"
+  flag: "1024"
+  gap_min_coverage: 20
 
 ################################################################
 # Variant calling

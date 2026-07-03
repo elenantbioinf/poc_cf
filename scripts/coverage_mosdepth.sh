@@ -9,13 +9,13 @@ BAM_DEDUP="$1"
 BED="$2"
 PREFIX="$3"
 THRESHOLDS="$4"
-EXTRA_ARGS="$5"
+FLAG="$5"
 
 mkdir -p "$(dirname "$PREFIX")"
 
 mosdepth \
     --by "$BED" \
     --thresholds "$THRESHOLDS" \
-    $EXTRA_ARGS \
+    --flag "$FLAG" \
     "$PREFIX" \
     "$BAM_DEDUP"
