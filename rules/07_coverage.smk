@@ -33,3 +33,23 @@ rule r07_01_coverage:
             {params.flag} \
             > {log} 2>&1
         """
+
+rule r07_02_filter_per_base_by_bed:
+    input:
+        per_base = config["07_coverage"]["out_dir"] + "/{id}.per-base.bed.gz",
+        bed = config["target_region"]["bed"],
+        script = "scripts/filter_per_base_by_bed.sh"
+    output:
+        bed_filtered = config["07_coverage"]["out_dir"] + "/{id}.target-per-base.bed.gz"
+    log:
+        "logs/07_coverage/{id}.filter_per_base_by_bed.log"
+    conda:
+        "../envs/07_coverage.yml"
+    shell:
+        """
+        {input.script} \
+            {input.per_base} \
+            {input.bed} \
+            {output.bed_filtered} \
+            > {log} 2>&1
+        """
