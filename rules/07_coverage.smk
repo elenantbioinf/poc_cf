@@ -53,3 +53,26 @@ rule r07_02_filter_per_base_by_bed:
             {output.bed_filtered} \
             > {log} 2>&1
         """
+
+rule r07_03_detect_coverage_gaps:
+    input:
+        bed = config["07_coverage"]["out_dir"] + "/{id}.target-per-base.bed.gz",
+        script = "scripts/detect_coverage_gaps.py"
+    output:
+        tsv = config["07_coverage"]["out_dir"] + "/{id}.coverage_gaps.tsv"
+    log:
+        "logs/07_coverage/{id}.detect_coverage_gaps.log"
+    conda:
+        "../envs/07_coverage.yml"
+    params:
+        min_coverage = config["07_coverage"]["gap_min_coverage"]
+    shell:
+        """
+        python {input.script} \
+            {input.bed} \
+            {output.tsv} \
+            {wildcards.id} \
+            {params.min_coverage} \
+            > {log} 2>&1
+        """
+    

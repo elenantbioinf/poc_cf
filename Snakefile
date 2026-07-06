@@ -73,7 +73,8 @@ rule all:
         expand(config["07_coverage"]["out_dir"] + "/{id}.thresholds.bed.gz", id=SAMPLES),
         expand(config["07_coverage"]["out_dir"] + "/{id}.per-base.bed.gz", id=SAMPLES),
         expand(config["07_coverage"]["out_dir"] + "/{id}.target-per-base.bed.gz", id=SAMPLES),
-
+        expand(config["07_coverage"]["out_dir"] + "/{id}.coverage_gaps.tsv", id=SAMPLES),
+        
         #Variant_calling and index:
         expand(config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz", id=SAMPLES),
         expand(config["08_variant_calling"]["out_dir"] + "/{id}.ori.vcf.gz.tbi", id=SAMPLES),
