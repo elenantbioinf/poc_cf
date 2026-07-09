@@ -75,4 +75,24 @@ rule r07_03_detect_coverage_gaps:
             {params.min_coverage} \
             > {log} 2>&1
         """
+
+rule r07_04_plot_coverage_gaps:
+    input:
+        bed = config["target_region"]["bed"],
+        gaps_tsv = config["07_coverage"]["out_dir"] + "/{id}.coverage_gaps.tsv",
+        script = "scripts/plot_target_coverage_gap.py"
+    output:
+        plot = config["07_coverage"]["out_dir"] + "/{id}.target_region_evaluability.png"
+    log:
+        "logs/07_coverage/{id}.plot_coverage_gaps.log"
+    conda:
+        "../envs/07_coverage.yml"
+    shell:
+        """
+        python {input.script} \
+            {input.bed} \
+            {input.gaps_tsv} \
+            {output.plot} \
+            > {log} 2>&1
+        """
     

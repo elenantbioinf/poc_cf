@@ -8,3 +8,5 @@ dependencies:
   - bedtools=2.31.1
   - htslib=1.23
   - python=3.12
+  - matplotlib=3.8.2
+  - pandas=2.1.3
