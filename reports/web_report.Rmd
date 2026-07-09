@@ -6,6 +6,7 @@ email_address: elena.nt.bioinf@gmail.com
 github_repo: https://github.com/elenantbioinf/poc_cf
 params:
     final_report_json: NULL
+    target_region_evaluability_plot: NULL
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,7 +81,7 @@ sample_id <- data$sample_id
 disease   <- data$disease
 gene      <- data$gene
 reference    <- data$reference_genome
-
+target_region_evaluability_plot <- params$target_region_evaluability_plot
 total_variants <- data$summary$total_unique_variants
 variants <- data$variants
 no_variants <- (total_variants == 0)
@@ -103,6 +104,25 @@ Gene: `r gene`
 Reference genome: `r reference`
 
 </div>
+
+## Target region coverage evaluability
+
+This figure summarizes which target BED intervals were technically evaluable according to the minimum coverage threshold used by the pipeline.
+
+```{r target-region-evaluability, echo=FALSE, results="asis"}
+if (!is.null(target_region_evaluability_plot) && file.exists(target_region_evaluability_plot)) {
+  image_src <- knitr::image_uri(target_region_evaluability_plot)
+
+  cat(
+    sprintf(
+      '<img src="%s" alt="Target region coverage evaluability map" style="width:100%%; display:block; margin:20px auto;">',
+      image_src
+    )
+  )
+} else {
+  cat("Target region evaluability plot was not available.\n")
+}
+```
 
 ## Variants analysis
 
