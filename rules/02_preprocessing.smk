@@ -50,7 +50,9 @@ rule r02_02_clean_fastqc:
     shell:
         """
         mkdir -p {params.outdir}/.done
-        {input.script} {input.r1} {input.r2} {params.outdir} > {log} 2>&1
+        {input.script} \
+            {input.r1} {input.r2} \
+            {params.outdir} > {log} 2>&1
         touch {output.done}
         """
 
@@ -59,7 +61,8 @@ rule r02_03_clean_multiqc:
         done = config["02_preprocessing"]["clean_fastqc_dir"] + "/.done/{id}.fastqc.done",
         script = "scripts/multiqc.sh"
     output:
-        html = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html"
+        html = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html",
+        fastqc_tsv = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report_data/multiqc_fastqc.txt"
     log:
         "logs/02_preprocessing/{id}.clean_multiqc.log"
     conda:
@@ -69,5 +72,28 @@ rule r02_03_clean_multiqc:
         outdir = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}"
     shell:
         """
-        {input.script} {params.fastqc_dir} {params.outdir} > {log} 2>&1
+        {input.script} \
+            {params.fastqc_dir} \
+            {params.outdir} \
+            > {log} 2>&1
+        """
+
+rule r02_04_qc_summary:
+    input:
+        raw_multiqc = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report_data/multiqc_fastqc.txt",
+        clean_multiqc = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report_data/multiqc_fastqc.txt",
+        script = "scripts/qc_summary.sh"
+    output:
+        qc_summary_tsv = config["02_preprocessing"]["qc_summary_dir"] + "/{id}.qc_summary.tsv"
+    log:
+        "logs/02_preprocessing/{id}.qc_summary.log"
+    conda:
+        "../envs/01_quality_control.yml"
+    shell:
+        """
+        {input.script} \
+            {input.raw_multiqc} \
+            {input.clean_multiqc} \
+            {output.qc_summary_tsv} \
+            > {log} 2>&1
         """

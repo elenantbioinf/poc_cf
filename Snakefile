@@ -37,6 +37,7 @@ rule all:
        
         #Preprocessing: Quality control after trimming
         expand(config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html", id=SAMPLES),
+        expand(config["02_preprocessing"]["qc_summary_dir"] + "/{id}.qc_summary.tsv", id=SAMPLES),
         
         #Reference genome
         config["03_reference"]["fasta"],

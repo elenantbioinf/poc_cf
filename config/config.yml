@@ -33,6 +33,7 @@ paths:
   fastp_dir: "results/02_preprocessing/fastp"
   clean_fastqc_dir: "results/02_preprocessing/clean_fastqc"
   clean_multiqc_dir: "results/02_preprocessing/clean_multiqc"
+  qc_summary_dir: "results/02_preprocessing/qc_summary"
 
 trimming:
   min_length: 30

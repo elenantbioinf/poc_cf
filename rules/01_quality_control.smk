@@ -28,7 +28,8 @@ rule r01_02_raw_multiqc:
         done = config["01_quality_control"]["raw_fastqc_dir"] + "/.done/{id}.fastqc.done",
         script = "scripts/multiqc.sh"
     output:
-        html = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report.html"
+        html = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report.html",
+        fastqc_tsv = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report_data/multiqc_fastqc.txt"
     conda:
         "../envs/01_quality_control.yml"
     log:
