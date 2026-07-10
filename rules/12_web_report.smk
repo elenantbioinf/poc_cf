@@ -6,7 +6,10 @@ rule r12_01_render_rmd:
     input:
         script = "scripts/render_web_report.R",
         rmd = config["12_web_report"]["rmd_template"],
-        final_report_json = "final_report/{id}.final_report.json",
+        final_report_json = config["12_web_report"]["out_dir"] + "/{id}.final_report.json",
+        qc_summary = config["02_preprocessing"]["qc_summary_dir"] + "/{id}.qc_summary.tsv",
+        raw_multiqc = config["01_quality_control"]["raw_multiqc_dir"] + "/{id}/multiqc_report.html",
+        clean_multiqc = config["02_preprocessing"]["clean_multiqc_dir"] + "/{id}/multiqc_report.html",
         coverage_plot = config["07_coverage"]["out_dir"] + "/{id}.target_region_evaluability.png",
         coverage_gaps = config["07_coverage"]["out_dir"] + "/{id}.coverage_gaps.tsv",
         target_bed = config["target_region"]["bed"]
@@ -24,6 +27,9 @@ rule r12_01_render_rmd:
             {input.rmd} \
             {output.html} \
             {input.final_report_json} \
+            {input.qc_summary} \
+            {input.raw_multiqc} \
+            {input.clean_multiqc} \
             {input.coverage_plot} \
             {input.coverage_gaps} \
             {input.target_bed} \

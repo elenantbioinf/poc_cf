@@ -6,6 +6,9 @@ email_address: elena.nt.bioinf@gmail.com
 github_repo: https://github.com/elenantbioinf/poc_cf
 params:
     final_report_json: NULL
+    qc_summary_tsv: NULL
+    raw_multiqc_report: NULL
+    clean_multiqc_report: NULL
     target_region_evaluability_plot: NULL
     coverage_gaps_tsv: NULL
     gap_min_coverage: NULL
@@ -201,6 +204,48 @@ pre {
 .coverage-green {color: #4d7f4d;font-weight: 700}
 
 .coverage-red {color: #832121;font-weight: 700}
+
+.qc-summary-table {
+    max-width: 900px;
+    margin: 20px auto 45px auto;
+    overflow-x: auto;
+}
+
+.qc-summary-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.qc-summary-table th {
+    background-color: #d2d9e7;
+    border: 1px solid #c4c8cf;
+    padding: 10px;
+    text-align: center;
+}
+
+.qc-summary-table td {
+    border: 1px solid #dcdcdc;
+    padding: 10px;
+    text-align: center;
+}
+
+.qc-summary-table tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.qc-interpretation {
+    max-width: 780px;
+    margin: 20px auto 45px auto;
+    padding: 18px 24px;
+    background-color: #f8f8f8;
+    border-left: 10px solid #1f3a5f;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    color: #333333;
+    font-size: 15px;
+    line-height: 1.5;
+}
 ```
 
 ```{r echo=FALSE}
@@ -213,6 +258,9 @@ disease   <- data$disease
 gene      <- data$gene
 reference    <- data$reference_genome
 
+qc_summary_tsv <- params$qc_summary_tsv
+raw_multiqc_report <- params$raw_multiqc_report
+clean_multiqc_report <- params$clean_multiqc_report
 target_bed <- params$target_bed
 target_region_evaluability_plot <- params$target_region_evaluability_plot
 coverage_gaps_tsv <- params$coverage_gaps_tsv
@@ -385,6 +433,215 @@ if (is.na(analysis_gap_count)) {
 <strong>Gene:</strong> `r gene`
 
 <strong>Reference genome:</strong> `r reference`
+
+</div>
+
+## Sequencing quality summary
+
+This table compares the FastQC metrics reported by MultiQC before and after read preprocessing.
+
+```{r qc-summary-table, echo=FALSE, results="asis", warning=FALSE}
+if (!is.null(qc_summary_tsv) && file.exists(qc_summary_tsv)) {
+
+  qc_df <- read.delim(
+    qc_summary_tsv,
+    sep = "\t",
+    stringsAsFactors = FALSE,
+    check.names = FALSE
+  )
+
+  display_qc <- qc_df[
+    ,
+    c(
+      "read",
+      "stage",
+      "total_sequences",
+      "sequence_length",
+      "avg_sequence_length",
+      "percent_gc",
+      "percent_duplicates"
+    )
+  ]
+   
+  colnames(display_qc) <- c(
+    "Read",
+    "Stage",
+    "Total sequences",
+    "Sequence length",
+    "Average sequence length",
+    "GC (%)",
+    "Duplicated sequences (%)"
+  )
+
+  display_qc[["Total sequences"]] <- format(
+    display_qc[["Total sequences"]],
+    big.mark = ",",
+    scientific = FALSE
+  )
+
+  display_qc[["Average sequence length"]] <- sprintf(
+    "%.2f",
+    as.numeric(display_qc[["Average sequence length"]])
+  )
+
+  display_qc[["GC (%)"]] <- sprintf(
+    "%.2f",
+    as.numeric(display_qc[["GC (%)"]])
+  )
+
+  display_qc[["Duplicated sequences (%)"]] <- sprintf(
+    "%.2f",
+    as.numeric(display_qc[["Duplicated sequences (%)"]])
+  )
+
+  cat("<div class='qc-summary-table'>\n")
+
+  cat(
+    knitr::kable(
+      display_qc,
+      format = "html",
+      escape = FALSE,
+      row.names = FALSE
+    )
+  )
+  cat("</div>\n")
+
+} else {
+  cat("QC summary table was not available.\n")
+}
+```
+
+```{r qc-summary-interpretation, echo=FALSE, results="asis", warning=FALSE}
+if (
+  exists("qc_df") &&
+  nrow(qc_df) > 0 &&
+  all(
+    c(
+      "read",
+      "stage",
+      "total_sequences",
+      "avg_sequence_length",
+      "percent_gc",
+      "percent_duplicates"
+    ) %in% colnames(qc_df)
+  )
+) {
+
+  raw_qc <- qc_df[qc_df$stage == "Raw", ]
+  filtered_qc <- qc_df[qc_df$stage == "Post-filtering", ]
+
+  common_reads <- intersect(
+    raw_qc$read,
+    filtered_qc$read
+  )
+
+  if (length(common_reads) > 0) {
+
+    retained_percentages <- vapply(
+      common_reads,
+      function(read_name) {
+        raw_total <- as.numeric(
+          raw_qc$total_sequences[raw_qc$read == read_name][1]
+        )
+
+        filtered_total <- as.numeric(
+          filtered_qc$total_sequences[filtered_qc$read == read_name][1]
+        )
+
+        (filtered_total / raw_total) * 100
+      },
+      numeric(1)
+    )
+
+    retained_percent <- mean(
+      retained_percentages,
+      na.rm = TRUE
+    )
+
+    raw_mean_length <- mean(
+      as.numeric(raw_qc$avg_sequence_length),
+      na.rm = TRUE
+    )
+
+    filtered_mean_length <- mean(
+      as.numeric(filtered_qc$avg_sequence_length),
+      na.rm = TRUE
+    )
+
+    mean_length_change <- filtered_mean_length - raw_mean_length
+
+    raw_gc <- mean(
+      as.numeric(raw_qc$percent_gc),
+      na.rm = TRUE
+    )
+
+    filtered_gc <- mean(
+      as.numeric(filtered_qc$percent_gc),
+      na.rm = TRUE
+    )
+
+    raw_duplicates <- mean(
+      as.numeric(raw_qc$percent_duplicates),
+      na.rm = TRUE
+    )
+
+    filtered_duplicates <- mean(
+      as.numeric(filtered_qc$percent_duplicates),
+      na.rm = TRUE
+    )
+
+    cat(
+      paste0(
+        "\n<div class='qc-interpretation'>",
+        "<p><strong>Interpretation:</strong> ",
+        sprintf("%.2f%%", retained_percent),
+        " of reads were retained after preprocessing. ",
+        "The average sequence length changed from ",
+        sprintf("%.2f", raw_mean_length),
+        " bp to ",
+        sprintf("%.2f", filtered_mean_length),
+        " bp (",
+        sprintf("%+.2f", mean_length_change),
+        " bp). ",
+        "The mean GC content remained stable at approximately ",
+        sprintf("%.2f%%", filtered_gc),
+        ". ",
+        "The estimated duplicated-sequence percentage changed from ",
+        sprintf("%.2f%%", raw_duplicates),
+        " to ",
+        sprintf("%.2f%%", filtered_duplicates),
+        ".</p>",
+        "</div>\n"
+      )
+    )
+  }
+
+} else {
+  cat(
+    "\n<div class='qc-interpretation'>",
+    "<p><strong>Interpretation:</strong> ",
+    "The sequencing quality metrics could not be interpreted automatically.",
+    "</p>",
+    "</div>\n"
+  )
+}
+```
+
+<div class="qc-report-links">
+
+<p><strong>Detailed quality-control reports:</strong></p>
+
+<p>
+<a href="`r raw_multiqc_report`" target="_blank">
+Open raw-read MultiQC report
+</a>
+</p>
+
+<p>
+<a href="`r clean_multiqc_report`" target="_blank">
+Open post-filtering MultiQC report
+</a>
+</p>
 
 </div>
 
