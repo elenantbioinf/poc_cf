@@ -7,13 +7,17 @@ rule r12_01_render_rmd:
         script = "scripts/render_web_report.R",
         rmd = config["12_web_report"]["rmd_template"],
         final_report_json = "final_report/{id}.final_report.json",
-        coverage_plot = config["07_coverage"]["out_dir"] + "/{id}.target_region_evaluability.png"
+        coverage_plot = config["07_coverage"]["out_dir"] + "/{id}.target_region_evaluability.png",
+        coverage_gaps = config["07_coverage"]["out_dir"] + "/{id}.coverage_gaps.tsv",
+        target_bed = config["target_region"]["bed"]
     output:
         html = config["12_web_report"]["out_dir"] + "/{id}.web_report.html"
     log:
         "logs/12_web_report/{id}.web_report.log"
     conda:
         "../envs/12_web_report.yml"
+    params:
+        gap_min_coverage = config["07_coverage"]["gap_min_coverage"]
     shell:
         """
         Rscript {input.script} \
@@ -21,5 +25,8 @@ rule r12_01_render_rmd:
             {output.html} \
             {input.final_report_json} \
             {input.coverage_plot} \
+            {input.coverage_gaps} \
+            {input.target_bed} \
+            {params.gap_min_coverage} \
             > {log} 2>&1
         """

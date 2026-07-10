@@ -7,6 +7,9 @@ github_repo: https://github.com/elenantbioinf/poc_cf
 params:
     final_report_json: NULL
     target_region_evaluability_plot: NULL
+    coverage_gaps_tsv: NULL
+    gap_min_coverage: NULL
+    target_bed: NULL
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,6 +73,27 @@ pre {
     padding: 15px;
     border-radius: 6px;
 }
+
+.coverage-summary {
+    padding: 18px 22px;
+    margin: 20px 0 35px 0;
+    border-radius: 6px;
+    background-color: #f7f7f7;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.coverage-summary p {
+    margin: 5px 0;
+}
+
+.coverage-ok {
+    border-left: 5px solid #4d7f4d;
+}
+
+.coverage-warning {
+    border-left: 5px solid #b2182b;
+}
 ```
 
 ```{r echo=FALSE}
@@ -81,7 +105,12 @@ sample_id <- data$sample_id
 disease   <- data$disease
 gene      <- data$gene
 reference    <- data$reference_genome
+
+target_bed <- params$target_bed
 target_region_evaluability_plot <- params$target_region_evaluability_plot
+coverage_gaps_tsv <- params$coverage_gaps_tsv
+gap_min_coverage <- params$gap_min_coverage
+
 total_variants <- data$summary$total_unique_variants
 variants <- data$variants
 no_variants <- (total_variants == 0)
@@ -121,6 +150,122 @@ if (!is.null(target_region_evaluability_plot) && file.exists(target_region_evalu
   )
 } else {
   cat("Target region evaluability plot was not available.\n")
+}
+```
+
+### Coverage gap summary
+
+```{r coverage-gap-summary, echo=FALSE, results="asis"}
+format_bp <- function(value) {
+  format(value, big.mark = ",", scientific = FALSE)
+}
+
+format_percent <- function(value) {
+  sprintf("%.2f%%", value)
+}
+
+read_target_bed <- function(target_bed_file) {
+  bed_df <- read.delim(
+    target_bed_file,
+    sep = "\t",
+    header = FALSE,
+    stringsAsFactors = FALSE,
+    comment.char = "#"
+  )
+
+  if (ncol(bed_df) < 3) {
+    stop("Target BED file must contain at least three columns: chrom, start, end.")
+  }
+
+  colnames(bed_df)[1:3] <- c("chrom", "start", "end")
+
+  bed_df$start <- as.integer(bed_df$start)
+  bed_df$end <- as.integer(bed_df$end)
+
+  return(bed_df)
+}
+
+count_affected_target_intervals <- function(bed_df, gaps_df) {
+  affected <- vapply(
+    seq_len(nrow(bed_df)),
+    function(index) {
+      any(
+        gaps_df$chrom == bed_df$chrom[index] &
+          gaps_df$end > bed_df$start[index] &
+          gaps_df$start < bed_df$end[index]
+      )
+    },
+    logical(1)
+  )
+
+  sum(affected)
+}
+
+if (
+  !is.null(coverage_gaps_tsv) && file.exists(coverage_gaps_tsv) &&
+  !is.null(target_bed) && file.exists(target_bed)
+) {
+
+  gaps_df <- read.delim(
+    coverage_gaps_tsv,
+    sep = "\t",
+    stringsAsFactors = FALSE
+  )
+
+  bed_df <- read_target_bed(target_bed)
+
+  total_target_bp <- sum(bed_df$end - bed_df$start)
+  total_target_intervals <- nrow(bed_df)
+
+  if (nrow(gaps_df) == 0) {
+
+    cat(
+      paste0(
+        "\n<div class='coverage-summary coverage-ok'>",
+        "<p>No low-coverage gaps were detected below ", gap_min_coverage, "X.</p>",
+        "<p>All target BED intervals are technically evaluable according to this coverage criterion.</p>",
+        "<p>Total target length assessed: ", format_bp(total_target_bp), " bp.</p>",
+        "</div>\n"
+      )
+    )
+
+  } else {
+
+    gaps_df$start <- as.integer(gaps_df$start)
+    gaps_df$end <- as.integer(gaps_df$end)
+    gaps_df$length <- as.integer(gaps_df$length)
+
+    total_low_coverage_bp <- sum(gaps_df$length, na.rm = TRUE)
+    low_coverage_bp_percent <- (total_low_coverage_bp / total_target_bp) * 100
+
+    affected_target_intervals <- count_affected_target_intervals(
+      bed_df = bed_df,
+      gaps_df = gaps_df
+    )
+
+    affected_target_intervals_percent <- (
+      affected_target_intervals / total_target_intervals
+    ) * 100
+
+    cat(
+      paste0(
+        "\n<div class='coverage-summary coverage-warning'>",
+        "<p>Low-coverage gaps detected: ", nrow(gaps_df), "</p>",
+        "<p>Minimum coverage threshold: ", gap_min_coverage, "X</p>",
+        "<p>Total target length assessed: ", format_bp(total_target_bp), " bp</p>",
+        "<p>Total low-coverage length: ", format_bp(total_low_coverage_bp), " bp</p>",
+        "<p>Non-evaluable target bases: ", format_percent(low_coverage_bp_percent), "</p>",
+        "<p>Target intervals affected by low coverage: ", affected_target_intervals,
+        " / ", total_target_intervals,
+        " (", format_percent(affected_target_intervals_percent), ")</p>",
+        "<p>Regions overlapping these gaps should be considered technically non-evaluable for variant interpretation at this threshold.</p>",
+        "</div>\n"
+      )
+    )
+  }
+
+} else {
+  cat("Coverage gap summary was not available.\n")
 }
 ```
 
