@@ -135,7 +135,7 @@ START_TIME=$(date +%s)
 START_DATE=$(date "+%Y-%m-%d %H:%M:%S")
 
 #Run the command, capture the status and measure resource usage
-if LC_ALL=C /usr/bin/time \
+if LC_ALL=C.UTF-8 /usr/bin/time \
     -v -o "$TIME_FILE" "${CMD[@]}" 2>&1 | tee -a "$LOG_FILE"
 then
     STATUS=0

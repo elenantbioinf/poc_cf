@@ -295,7 +295,7 @@ This report integrates variant analysis, functional annotation and target-region
 
 ## Analysis summary
 
-```{r analysis-summary, echo=FALSE, results="asis"}
+```{r analysis-summary, echo=FALSE, results="asis", warning=FALSE}
 format_percent <- function(value) {
   sprintf("%.2f%%", value)
 }
@@ -649,7 +649,7 @@ Open post-filtering MultiQC report
 
 This figure summarizes which target BED intervals were technically evaluable according to the minimum coverage threshold used by the pipeline.
 
-```{r target-region-evaluability, echo=FALSE, results="asis"}
+```{r target-region-evaluability, echo=FALSE, results="asis", warning=FALSE}
 if (!is.null(target_region_evaluability_plot) && file.exists(target_region_evaluability_plot)) {
   image_src <- knitr::image_uri(target_region_evaluability_plot)
 
@@ -680,7 +680,7 @@ if (!is.null(target_region_evaluability_plot) && file.exists(target_region_evalu
 
 ### Coverage gap summary
 
-```{r coverage-gap-summary, echo=FALSE, results="asis"}
+```{r coverage-gap-summary, echo=FALSE, results="asis", warning=FALSE}
 format_bp <- function(value) {
   format(value, big.mark = ",", scientific = FALSE)
 }
@@ -798,7 +798,7 @@ if (
 
 Total unique variants: `r total_variants`
 
-```{r echo=FALSE, results="asis"}
+```{r echo=FALSE, results="asis", warning=FALSE}
 if (no_variants) {
   cat("No variants were detected in the analysed data. However, this result should be interpreted together with the coverage evaluability assessment, since low-coverage target regions may limit the ability to detect variants in those intervals.\n")
 } else {
