@@ -147,19 +147,28 @@ ELAPSED_FORMATTED=$(printf "%02d:%02d:%02d" \
     $((ELAPSED_SECONDS % 60))
 )
 
-#Save pipeline runtime summary
+#Determine pipeline status
+if [[ "$STATUS" -eq 0 ]]; then
+    PIPELINE_STATUS="SUCCESS"
+else
+    PIPELINE_STATUS="FAILED"
+fi
+
+#Save pipeline performance summary
 PERFORMANCE_DIR="results/13_performance"
-RUNTIME_FILE="$PERFORMANCE_DIR/pipeline_runtime.tsv"
+PERFORMANCE_FILE="$PERFORMANCE_DIR/pipeline_performance.tsv"
 
 mkdir -p "$PERFORMANCE_DIR"
 
 {
     printf "metric\tvalue\tunit\n"
+    printf "pipeline_status\t%s\t\n" "$PIPELINE_STATUS"
+    printf "exit_code\t%s\t\n" "$STATUS"
     printf "start_date\t%s\t\n" "$START_DATE"
     printf "end_date\t%s\t\n" "$END_DATE"
     printf "elapsed_time\t%s\tHH:MM:SS\n" "$ELAPSED_FORMATTED"
     printf "elapsed_seconds\t%s\tseconds\n" "$ELAPSED_SECONDS"
-} > "$RUNTIME_FILE"
+} > "$PERFORMANCE_FILE"
 
 #Final message
 {
@@ -169,7 +178,7 @@ mkdir -p "$PERFORMANCE_DIR"
     echo "============================================================"
     echo "End date:   $END_DATE"
     echo "Elapsed time:  $ELAPSED_FORMATTED"
-    echo "Runtime file:  $RUNTIME_FILE"
+    echo "Performance file:  $PERFORMANCE_FILE"
     echo "Exit code:  $STATUS"
     echo "Log file:   $LOG_FILE"
     echo "============================================================"
