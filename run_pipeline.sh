@@ -123,13 +123,21 @@ fi
     echo ""
 } | tee "$LOG_FILE"
 
+#Performance output files
+PERFORMANCE_DIR="results/13_performance"
+PERFORMANCE_FILE="$PERFORMANCE_DIR/pipeline_performance.tsv"
+TIME_FILE="$PERFORMANCE_DIR/pipeline_time.txt"
+
+mkdir -p "$PERFORMANCE_DIR"
 
 #Start pipeline runtime measurement
 START_TIME=$(date +%s)
 START_DATE=$(date "+%Y-%m-%d %H:%M:%S")
 
-#Run the command and capture the status
-if "${CMD[@]}" 2>&1 | tee -a "$LOG_FILE"; then
+#Run the command, capture the status and measure resource usage
+if LC_ALL=C /usr/bin/time \
+    -v -o "$TIME_FILE" "${CMD[@]}" 2>&1 | tee -a "$LOG_FILE"
+then
     STATUS=0
 else
     STATUS=$?
@@ -147,28 +155,15 @@ ELAPSED_FORMATTED=$(printf "%02d:%02d:%02d" \
     $((ELAPSED_SECONDS % 60))
 )
 
-#Determine pipeline status
-if [[ "$STATUS" -eq 0 ]]; then
-    PIPELINE_STATUS="SUCCESS"
-else
-    PIPELINE_STATUS="FAILED"
-fi
-
-#Save pipeline performance summary
-PERFORMANCE_DIR="results/13_performance"
-PERFORMANCE_FILE="$PERFORMANCE_DIR/pipeline_performance.tsv"
-
-mkdir -p "$PERFORMANCE_DIR"
-
-{
-    printf "metric\tvalue\tunit\n"
-    printf "pipeline_status\t%s\t\n" "$PIPELINE_STATUS"
-    printf "exit_code\t%s\t\n" "$STATUS"
-    printf "start_date\t%s\t\n" "$START_DATE"
-    printf "end_date\t%s\t\n" "$END_DATE"
-    printf "elapsed_time\t%s\tHH:MM:SS\n" "$ELAPSED_FORMATTED"
-    printf "elapsed_seconds\t%s\tseconds\n" "$ELAPSED_SECONDS"
-} > "$PERFORMANCE_FILE"
+#Generate pipeline performance summary
+scripts/performance_summary.sh \
+    "$TIME_FILE" \
+    "$PERFORMANCE_FILE" \
+    "$STATUS" \
+    "$START_DATE" \
+    "$END_DATE" \
+    "$ELAPSED_SECONDS" \
+    "$CORES"
 
 #Final message
 {
