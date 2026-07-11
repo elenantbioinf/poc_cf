@@ -26,6 +26,14 @@ END_DATE="$5"
 ELAPSED_SECONDS="$6"
 CORES="$7"
 
+#Pipeline output directories
+OUTPUT_DIRS=(
+    "data/clean"
+    "results"
+    "final_report"
+    "visual"
+)
+
 #Check required files
 if [[ ! -f "$TIME_FILE" ]]; then
     echo "Error: GNU time output file not found: $TIME_FILE" >&2
@@ -77,6 +85,56 @@ MAX_MEMORY_KB=$(awk -F': ' \
     }' "$TIME_FILE"
 )
 
+#Identify existing output directories
+EXISTING_OUTPUT_DIRS=()
+
+for output_dir in "${OUTPUT_DIRS[@]}"; do
+    if [[ -d "$output_dir" ]]; then
+        EXISTING_OUTPUT_DIRS+=("$output_dir")
+    fi
+done
+
+
+#Calculate output file count and disk usage
+if [[ "${#EXISTING_OUTPUT_DIRS[@]}" -eq 0 ]]; then
+    OUTPUT_FILE_COUNT=0
+    OUTPUT_DISK_BYTES=0
+else
+    OUTPUT_FILE_COUNT=$(
+        find "${EXISTING_OUTPUT_DIRS[@]}" \
+            -type f \
+            -printf "." |
+        wc -c |
+        tr -d "[:space:]"
+    )
+
+    OUTPUT_DISK_BYTES=$(
+        du -sB1 "${EXISTING_OUTPUT_DIRS[@]}" |
+        awk '{
+            total += $1
+        }
+        END {
+            print total + 0
+        }'
+    )
+fi
+
+
+#Convert output disk usage to MB and GB
+OUTPUT_DISK_MB=$(awk \
+    -v bytes="$OUTPUT_DISK_BYTES" \
+    'BEGIN {
+        printf "%.2f", bytes / 1024 / 1024
+    }'
+)
+
+OUTPUT_DISK_GB=$(awk \
+    -v bytes="$OUTPUT_DISK_BYTES" \
+    'BEGIN {
+        printf "%.2f", bytes / 1024 / 1024 / 1024
+    }'
+)
+
 #Use default values if a metric is missing
 USER_CPU_SECONDS="${USER_CPU_SECONDS:-0}"
 SYSTEM_CPU_SECONDS="${SYSTEM_CPU_SECONDS:-0}"
@@ -126,6 +184,10 @@ mkdir -p "$(dirname "$OUTPUT_TSV")"
     printf "maximum_memory\t%s\tMB\n" "$MAX_MEMORY_MB"
     printf "maximum_memory_gb\t%s\tGB\n" "$MAX_MEMORY_GB"
     printf "cores_requested\t%s\tcores\n" "$CORES"
+    printf "output_file_count\t%s\tfiles\n" "$OUTPUT_FILE_COUNT"
+    printf "output_disk_usage\t%s\tbytes\n" "$OUTPUT_DISK_BYTES"
+    printf "output_disk_usage_mb\t%s\tMB\n" "$OUTPUT_DISK_MB"
+    printf "output_disk_usage_gb\t%s\tGB\n" "$OUTPUT_DISK_GB"
 } > "$OUTPUT_TSV"
 
 
